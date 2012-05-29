@@ -1,9 +1,9 @@
 # build files
-build/**/*
 *.a
 *.def
 *.dll
 *.dynlib
+*.log
 *.o
 *.so
 
