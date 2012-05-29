@@ -19,14 +19,8 @@ C++ specific
 Code style
 ------------
 * Indent with 1 tab
-* BSD style braces, i.e.
-
-	void PrettyPrinter::prettyPrint(const container& c) {
-	  for(const auto& x : c) {
-	    cout << x << endl;
-	  }
-	}
- * Line length soft limit 120 characters
+* BSD style braces
+* Line length soft limit 120 characters
 
 
 Naming Conventions
