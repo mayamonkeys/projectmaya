@@ -19,13 +19,13 @@ Indent style
 ------------
 * 2 whitespaces
 * BSD style braces, i.e.
-```
-void PrettyPrinter::prettyPrint(const container& c) {
-  for(const auto& x : c) {
-    cout << x << endl;
-  }
-}
-```
+
+    void PrettyPrinter::prettyPrint(const container& c) {
+      for(const auto& x : c) {
+        cout << x << endl;
+      }
+    }
+
 
 
 Naming Conventions
