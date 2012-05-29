@@ -21,22 +21,22 @@ VERMINOR = 7
 ##########################################################################
 # Compiler settings
 ##########################################################################
-CC         = cl386
-CFLAGS     = /nologo /c /O1sgiy /Gs /W3 /I. /I..
-CFLAGS_DLL = $(CFLAGS) /DGLFW_BUILD_DLL
+CC         ?= cl386
+CFLAGS     ?= /nologo /c /O1sgiy /Gs /W3 /I. /I..
+CFLAGS_DLL ?= $(CFLAGS) /DGLFW_BUILD_DLL
 
 
 ##########################################################################
 # Library builder settings
 ##########################################################################
 # Static library
-MKLIB     = lib386
-LIBFLAGS  = /nologo
+MKLIB     ?= lib386
+LIBFLAGS  ?= /nologo
 
 # DLL
-LINK      = wlink
-LINKFLAGS = OPTION { quiet version=$(VERMAJOR).$(VERMINOR) } SYSTEM nt_dll initinstance terminstance
-LINKLIBS  = opengl32.lib user32.lib
+LINK      ?= wlink
+LINKFLAGS ?= OPTION { quiet version=$(VERMAJOR).$(VERMINOR) } SYSTEM nt_dll initinstance terminstance
+LINKLIBS  ?= opengl32.lib user32.lib
 
 
 ##########################################################################

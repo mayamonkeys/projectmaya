@@ -21,22 +21,22 @@ VERMINOR = 7
 ##########################################################################
 # Compiler settings
 ##########################################################################
-CC         = lc
-CFLAGS     = -c -O -A -I. -I..
-CFLAGS_DLL = $(CFLAGS) -DGLFW_BUILD_DLL
+CC         ?= lc
+CFLAGS     ?= -c -O -A -I. -I..
+CFLAGS_DLL ?= $(CFLAGS) -DGLFW_BUILD_DLL
 
 
 ##########################################################################
 # Library builder settings
 ##########################################################################
 # Static library
-MKLIB     = lcclib
+MKLIB     ?= lcclib
 LIBFLAGS  =
 
 # DLL
-LINK      = lcclnk
-LINKFLAGS = -dll -nounderscores -version $(VERMAJOR).$(VERMINOR) -s
-LINKLIBS  = opengl32.lib
+LINK      ?= lcclnk
+LINKFLAGS ?= -dll -nounderscores -version $(VERMAJOR).$(VERMINOR) -s
+LINKLIBS  ?= opengl32.lib
 
 
 ##########################################################################

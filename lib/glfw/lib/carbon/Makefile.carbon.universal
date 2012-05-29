@@ -20,10 +20,10 @@ all: libglfw.a
 ##########################################################################
 # Compiler settings
 ##########################################################################
-CC       = gcc
-FATFLAGS = -isysroot /Developer/SDKs/MacOSX10.4u.sdk \
+CC       ?= gcc
+FATFLAGS ?= -isysroot /Developer/SDKs/MacOSX10.4u.sdk \
 		   -mmacosx-version-min=10.4 -arch ppc -arch i386
-CFLAGS   = -c -I. -I.. -Wall -O2 -fno-common $(FATFLAGS)
+CFLAGS   ?= -c -I. -I.. -Wall -O2 -fno-common $(FATFLAGS)
 
 
 ##########################################################################
@@ -31,8 +31,8 @@ CFLAGS   = -c -I. -I.. -Wall -O2 -fno-common $(FATFLAGS)
 ##########################################################################
 SED       = sed
 INSTALL   = install
-MKLIB     = ar
-LIBFLAGS  = -rcs
+MKLIB     ?= ar
+LIBFLAGS  ?= -rcs
 RANLIB    = ranlib
 
 

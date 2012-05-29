@@ -1,10 +1,10 @@
 ##########################################################################
 # Automatically generated Makefile for GLFW
 ##########################################################################
-CC           = cc
-CFLAGS       = -c -I. -I..  -D_GLFW_USE_LINUX_JOYSTICKS -D_GLFW_HAS_XRANDR -D_GLFW_HAS_PTHREAD -D_GLFW_HAS_SCHED_YIELD -D_GLFW_HAS_GLXGETPROCADDRESS -D_GLFW_HAS_SYSCONF  -pthread -O2 -Wall
-SOFLAGS      = -shared -Wl,-soname,libglfw.so
-LFLAGS       =  -lXrandr  -lrt -lX11  -lGL -pthread -lm
+CC           ?= clang
+CFLAGS       ?= -c -I. -I..  -D_GLFW_USE_LINUX_JOYSTICKS -D_GLFW_HAS_XRANDR -D_GLFW_HAS_PTHREAD -D_GLFW_HAS_SCHED_YIELD -D_GLFW_HAS_GLXGETPROCADDRESS -D_GLFW_HAS_SYSCONF  -pthread -O2 -Wall
+SOFLAGS      ?= -shared -Wl,-soname,libglfw.so
+LFLAGS       ?=  -lXrandr  -lrt -lX11  -lGL -pthread -lm
 
 
 ##########################################################################
@@ -22,11 +22,11 @@ all: libglfw.a libglfw.so
 ##########################################################################
 # Library builder settings
 ##########################################################################
-AR       = ar
-LD       = ld
+AR       ?= ar
+LD       ?= ld
 SED      = sed
 INSTALL  = install
-ARFLAGS  = -rcs
+ARFLAGS  ?= -rcs
 HEADERS     = ../../include/GL/glfw.h ../internal.h platform.h
 
 

@@ -654,10 +654,10 @@ cat > "$MKNAME" <<EOF
 ##########################################################################
 # Automatically generated Makefile for GLFW
 ##########################################################################
-CC           = $CC
-CFLAGS       = $GLFW_LIB_CFLAGS $GLFW_CFLAGS
-SOFLAGS      = $SOFLAGS
-LFLAGS       = $GLFW_LIB_LFLAGS $GLFW_LFLAGS
+CC           ?= $CC
+CFLAGS       ?= $GLFW_LIB_CFLAGS $GLFW_CFLAGS
+SOFLAGS      ?= $SOFLAGS
+LFLAGS       ?= $GLFW_LIB_LFLAGS $GLFW_LFLAGS
 
 EOF
 cat './lib/x11/Makefile.x11.in' >>$MKNAME

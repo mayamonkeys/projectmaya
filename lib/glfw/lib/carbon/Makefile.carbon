@@ -20,19 +20,19 @@ all: libglfw.a libglfw.dylib
 ##########################################################################
 # Compiler settings
 ##########################################################################
-CC           = gcc
-CFLAGS       = -c -I. -I.. -Wall -O2 -fno-common -g -m32
+CC           ?= gcc
+CFLAGS       ?= -c -I. -I.. -Wall -O2 -fno-common -g -m32
 
 
 ##########################################################################
 # Library builder settings
 ##########################################################################
-AR          = ar
+AR          ?= ar
 SED         = sed
 INSTALL     = install
-ARFLAGS     = -rcs
+ARFLAGS     ?= -rcs
 RANLIB      = ranlib
-DYLIBFLAGS  = -framework AGL -framework Carbon -framework OpenGL \
+DYLIBFLAGS  ?= -framework AGL -framework Carbon -framework OpenGL \
               -dynamiclib -Wl,-single_module -compatibility_version 1 \
               -current_version 1 -install_name @executable_path/libglfw.dylib -m32
 

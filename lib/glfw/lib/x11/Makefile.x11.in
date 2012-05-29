@@ -14,11 +14,11 @@ all: libglfw.a libglfw.so
 ##########################################################################
 # Library builder settings
 ##########################################################################
-AR       = ar
-LD       = ld
+AR       ?= ar
+LD       ?= ld
 SED      = sed
 INSTALL  = install
-ARFLAGS  = -rcs
+ARFLAGS  ?= -rcs
 HEADERS     = ../../include/GL/glfw.h ../internal.h platform.h
 
 

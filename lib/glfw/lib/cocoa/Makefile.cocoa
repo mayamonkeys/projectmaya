@@ -28,12 +28,12 @@ CFLAGS += -c -I. -I.. -Wall -fno-common
 ##########################################################################
 # Library builder settings
 ##########################################################################
-AR          = ar
+AR          ?= ar
 SED         = sed
 INSTALL     = install
-ARFLAGS     = -rcs
+ARFLAGS     ?= -rcs
 RANLIB      = ranlib
-DYLIBFLAGS  = -framework Cocoa -framework OpenGL \
+DYLIBFLAGS  ?= -framework Cocoa -framework OpenGL \
               -dynamiclib -Wl,-single_module -compatibility_version 1 \
               -current_version 1 -install_name @executable_path/libglfw.dylib
 HEADERS     = ../../include/GL/glfw.h ../internal.h platform.h
