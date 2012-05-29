@@ -1,5 +1,8 @@
-TOOLCHAIN
-=========
+Compile and install libc++
+==========================
+
+Because libc++ implements many C++11 features we need, we recommend to use this lib instead of the standart C++ STL, which is provided by your system. There isn't any official release of the lib yet. Because of this and lag of good HOWTOs, we give you a short introduction how you can build and install libc++ on your system.
+
 
 libc++
 ------
