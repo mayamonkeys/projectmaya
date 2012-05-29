@@ -25,9 +25,11 @@ Icon?
 .lock-waf_*
 .waf-*/**/*
 waf3-*/**/*
+.waf*
 
 # build files
 build/**/*
+build
 
 # crash dumps
 core.*
