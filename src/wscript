@@ -1,0 +1,9 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import re
+
+def build(bld):
+	files = bld.path.ant_glob('*.cpp')
+	name = re.sub('\W', '', bld.env.NAME).lower()
+	bld.program(source=files, target='../' + name, use='glfw')

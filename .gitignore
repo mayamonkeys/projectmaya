@@ -1,0 +1,34 @@
+# backup files
+*~
+*.~*
+*.backup
+*.bak
+
+# temp files
+*.sw[a-p]
+
+# special Linux files
+.directory
+
+# special Windows files
+Desktop.ini
+Thumbs.db
+
+# special OSX files
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
+Icon?
+
+# waf files
+.lock-waf_*
+.waf-*/**/*
+waf3-*/**/*
+
+# build files
+build/**/*
+
+# crash dumps
+core.*
+

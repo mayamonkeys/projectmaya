@@ -1,0 +1,43 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import sys
+
+def configure(conf):
+	path = conf.path.abspath()
+	
+	# get Makefile path
+	conf.env.GLFW_MAKEPATH = path
+	
+	# detect platform
+	if sys.platform.startswith('cygwin'):
+		conf.env.GLFW_MAKETARGET = 'win32-mingw'
+		conf.env.GLFW_MAKECLEAN = 'mingw-clean'
+		conf.env.GLFW_LIBPATH = path + '/lib/win32'
+		conf.env.append_unique('STLIB', ['opengl32', 'winmm', 'gdi32'])
+	elif sys.platform.startswith('darwin'):
+		conf.env.GLFW_MAKETARGET = 'cocoa'
+		conf.env.GLFW_MAKECLEAN = 'cocoa-clean'
+		conf.env.GLFW_LIBPATH = path + '/lib/cocoa'
+		conf.env.append_unique('FRAMEWORK', ['Cocoa', 'OpenGL'])
+	elif sys.platform.startswith('linux'):
+		conf.env.GLFW_MAKETARGET = 'x11'
+		conf.env.GLFW_MAKECLEAN = 'x11-dist-clean'
+		conf.env.GLFW_LIBPATH = path + '/lib/x11'
+		conf.env.append_unique('LIB', ['Xrandr', 'rt', 'X11', 'GL', 'm'])
+		conf.env.append_unique('LINKFLAGS', ['-pthread'])
+	elif sys.platform.startswith('win32'):
+		conf.env.GLFW_MAKETARGET = 'win32-mingw'
+		conf.env.GLFW_MAKECLEAN = 'mingw-clean'
+		conf.env.GLFW_LIBPATH = path + '/lib/win32'
+		conf.env.append_unique('STLIB', ['opengl32', 'winmm', 'gdi32'])
+	else:
+		conf.fatal('cannot find target platform for glfw')
+	
+	# add lib to env
+	conf.env.append_unique('INCLUDES', path + '/include')
+
+def build(bld):
+	# make
+	bld(rule='make --directory=' + bld.env.GLFW_MAKEPATH + ' ' + bld.env.GLFW_MAKETARGET, name='glfw_make', always=True)
+	bld.read_stlib('glfw', paths = [bld.env.GLFW_LIBPATH])

@@ -1,0 +1,9 @@
+# build files
+build/**/*
+*.a
+*.def
+*.dll
+*.dynlib
+*.o
+*.so
+
