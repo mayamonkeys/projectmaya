@@ -13,19 +13,20 @@ C++ specific
 * Use smart pointer if you need pointer semantics
 * Pass arguments by constant reference where possible
 * Use C++ casts, e.g. static_cast<int>() not C casts, like c = (int) i;
+* Use include header guards to avoid double inclusion, name them like the file, e.g. PRETTY_PRINT_H
 
 
-Indent style
+Code style
 ------------
-* 2 whitespaces
+* Indent with 1 tab
 * BSD style braces, i.e.
 
-    void PrettyPrinter::prettyPrint(const container& c) {
-      for(const auto& x : c) {
-        cout << x << endl;
-      }
-    }
-
+	void PrettyPrinter::prettyPrint(const container& c) {
+	  for(const auto& x : c) {
+	    cout << x << endl;
+	  }
+	}
+ * Line length soft limit 120 characters
 
 
 Naming Conventions
@@ -34,8 +35,3 @@ Naming Conventions
 * Methods lower CamelCase, e.g. prettyPrint
 * Variables lower CamelCase, e.g. int speed = 0;
 * Acronyms as is, e.g. float GPAScore = 2.4f;
-
-
-Library specific
-----------------
-* Do not use GLFW's threading functions, because they are deprecated in the upcoming version 3
