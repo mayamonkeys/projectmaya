@@ -53,11 +53,11 @@ def build(bld):
 
 def get_git_rev():
 	try:
-		p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=False, shell=True)
+		p = subprocess.Popen(['git rev-parse HEAD'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=False, shell=True)
 		stdout = p.communicate()[0]
 		
 		if p.returncode == 0:
-			stdout_string = str(stdout, sys.stdout.encoding)
+			stdout_string = str(stdout.decode(sys.stdout.encoding))
 			lines = stdout_string.splitlines()
 			return lines[0]
 		else:
