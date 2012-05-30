@@ -12,11 +12,7 @@ This lib is the C++ STL. First, download it:
 	svn co http://llvm.org/svn/llvm-project/libcxx/trunk libcxx
 	cd libcxx
 
-If you want to use some multicore stuff, open *include/atomic* and remove the `!` from the following line `#if !__has_feature(cxx_atomic)`:
-
-	sed -i 's/#if !__has_feature(cxx_atomic)/#if __has_feature(cxx_atomic)/' include/atomic
-
-Now, build it:
+Build it:
 
 	cd lib
 	./buildit
