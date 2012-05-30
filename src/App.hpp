@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "InteractionHandler.hpp"
+#include "Logger.hpp"
 #include "UserInterface.hpp"
 
 
@@ -20,6 +21,7 @@ namespace ProjectMaya {
 
 		private:
 			std::shared_ptr<InteractionHandler> ih;
+			std::shared_ptr<Logger> lg;
 			std::shared_ptr<UserInterface> ui;
 	};
 

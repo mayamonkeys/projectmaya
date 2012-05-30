@@ -5,11 +5,13 @@
 #include <queue>
 
 #include "Module.hpp"
+#include "Logger.hpp"
 
 namespace ProjectMaya {
 
 	class InteractionHandler : public Module {
 		public:
+			InteractionHandler(std::shared_ptr<Logger> lg);
 			void run() override;
 
 			void newKeyEvent(bool pressed, int keyCode);
@@ -22,6 +24,8 @@ namespace ProjectMaya {
 				int keyCode;
 			};
 
+			std::shared_ptr<Logger> lg;
+
 			std::mutex memberMutex;
 			std::queue<KeyEvent> keyQueue;
 			bool exit = false;
@@ -30,4 +34,3 @@ namespace ProjectMaya {
 }
 
 #endif
-

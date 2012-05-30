@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "InteractionHandler.hpp"
+#include "Logger.hpp"
 #include "Module.hpp"
 
 
@@ -14,7 +15,7 @@ namespace ProjectMaya {
 	 */
 	class UserInterface : public Module {
 		public:
-			UserInterface(std::shared_ptr<InteractionHandler> ih);
+			UserInterface(std::shared_ptr<InteractionHandler> ih, std::shared_ptr<Logger> lg);
 
 		protected:
 			void init() override;
@@ -23,6 +24,7 @@ namespace ProjectMaya {
 
 		private:
 			std::shared_ptr<InteractionHandler> ih;
+			std::shared_ptr<Logger> lg;
 
 			void initGLFW();
 			void initOpenGL() const;

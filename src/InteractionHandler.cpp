@@ -10,7 +10,12 @@ using namespace ProjectMaya;
 using std::chrono::milliseconds;
 using std::lock_guard;
 using std::mutex;
+using std::shared_ptr;
 using std::this_thread::sleep_for;
+
+InteractionHandler::InteractionHandler(shared_ptr<Logger> lg) {
+	this->lg = lg;
+}
 
 void InteractionHandler::run() {
 	milliseconds stime(20);
@@ -32,8 +37,9 @@ void InteractionHandler::run() {
 				this->keyQueue.pop();
 			}
 
-			// do something
-			std::cout << "Key " << event.keyCode << " " << event.pressed << std::endl;
+			/// \todo do something with the information
+			lg->log("key pressed");
+
 			if (event.keyCode == GLFW_KEY_ESC) {
 				this->exit = true;
 			}

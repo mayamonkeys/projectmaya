@@ -22,8 +22,9 @@ void keyCallbackC(int id, int state) {
 	keyCallbackFunc(id, state);
 }
 
-UserInterface::UserInterface(shared_ptr<InteractionHandler> ih) {
+UserInterface::UserInterface(shared_ptr<InteractionHandler> ih, shared_ptr<Logger> lg) {
 	this->ih = ih;
+	this->lg = lg;
 }
 
 void UserInterface::init() {
@@ -78,12 +79,18 @@ void UserInterface::render() const {
 	while(glfwGetWindowParam(GLFW_OPENED) && !this->ih->exitRequested() && !this->shouldShutdown()) {
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
+
+		/// \todo remove following two lines, they are for segfault testing
+		if((currentTime - oldTime) < 0.2) continue;
+		lg->log(1, "rendering frame");
+
 		oldTime = currentTime;
 
 		renderOpenGL(deltaRotate);
 		renderScene();
 
 		glfwSwapBuffers();
+
 	}
 }
 
@@ -105,7 +112,7 @@ void UserInterface::renderScene() const {
 	glScalef(0.3f, 0.3f, 0.3f);
 
 
-	/* TODO: Method 1: Use glDrawElements with indexed triangles, best performance */
+	/// \todo Method 1: Use glDrawElements with indexed triangles, best performance */
 
 
 	/* Method 2: Copy arrays to graphics card and draw at once, medium performance */
