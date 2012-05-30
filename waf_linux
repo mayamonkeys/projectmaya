@@ -1,4 +1,3 @@
 #!/bin/sh
 
-CXX=clang++ CXXFLAGS="-stdlib=libc++ -lc++abi" LDFLAGS="-lc++ -lc++abi" ./waf $1
-
+CC="clang" CXX="clang++" CXXFLAGS="-stdlib=libc++" LDFLAGS="-lc++ -lc++abi" ./waf $1
