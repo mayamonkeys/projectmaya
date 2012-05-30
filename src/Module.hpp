@@ -6,44 +6,41 @@
 #include <mutex>
 #include <thread>
 
-using std::atomic;
-using std::mutex;
-using std::thread;
-using std::unique_ptr;
 
 namespace ProjectMaya {
+
 	class Module {
 		public:
-			Module();
-			~Module();
+			explicit Module();
+			virtual ~Module();
 
 			void start();
 			void stop();
 			void join();
 
-			bool wasStarted();
-			bool wasStopped();
+			bool wasStarted() const;
+			bool wasStopped() const;
 
 		protected:
-			virtual void init() {};
-			virtual void run() {};
-			virtual void cleanup() {};
-			bool shouldShutdown();
+			virtual void init(){};
+			virtual void run(){};
+			virtual void cleanup(){};
+			bool shouldShutdown() const;
 
 		private:
-			mutex memberMutex;
-			mutex phaseRun;
-			mutex phaseCleanup;
-			mutex readyInit;
-			mutex readyRun;
-			unique_ptr<thread> myThread;
-			atomic<bool> started;
-			atomic<bool> stopped;
-			atomic<bool> shutdown;
+			std::mutex memberMutex;
+			std::mutex phaseRun;
+			std::mutex phaseCleanup;
+			std::mutex readyInit;
+			std::mutex readyRun;
+			std::unique_ptr<std::thread> myThread;
+			std::atomic<bool> started;
+			std::atomic<bool> stopped;
+			std::atomic<bool> shutdown;
 
 			void threadFunc();
 	};
+
 }
 
 #endif
-

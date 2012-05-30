@@ -10,16 +10,13 @@ using std::runtime_error;
 
 using namespace ProjectMaya;
 
-UserInterface::UserInterface() {
-}
-
 void UserInterface::run() {
 	initGLFW();
 	initOpenGL();
 	render();
 }
 
-void UserInterface::initGLFW() {
+void UserInterface::initGLFW() const {
 	if(!glfwInit()) {
 		throw new runtime_error("could not initialize glfw");
 	}
@@ -36,7 +33,7 @@ void UserInterface::initGLFW() {
 	glfwSetWindowTitle(NAME " - " REVISION);
 }
 
-void UserInterface::initOpenGL() {
+void UserInterface::initOpenGL() const {
 	/* transparency */
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,7 +43,7 @@ void UserInterface::initOpenGL() {
 }
 
 /* main render loop */
-void UserInterface::render() {
+void UserInterface::render() const {
 	int running = GL_TRUE;
 
 	double oldTime = glfwGetTime();
@@ -70,7 +67,7 @@ void UserInterface::render() {
 }
 
 /* for now pass the rotation value as argument */
-void UserInterface::renderOpenGL(const double& deltaRotate) {
+void UserInterface::renderOpenGL(const double& deltaRotate) const {
 	glLoadIdentity();
 
 	/* rotate around the y and z axes */
@@ -79,7 +76,7 @@ void UserInterface::renderOpenGL(const double& deltaRotate) {
 }
 
 /* render some examples, by using different methods */
-void UserInterface::renderScene() {
+void UserInterface::renderScene() const {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glColor4f(1.0f, 0.3f, 0.0f, 0.6f);
 

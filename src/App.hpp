@@ -5,19 +5,19 @@
 
 #include "UserInterface.hpp"
 
-using std::shared_ptr;
 
 namespace ProjectMaya {
+
 	class App {
 		public:
 			App();
 			App& operator=(const App& obj) = delete;
-			void waitForShutdown();
+			void waitForShutdown() const;
 
 		private:
-			shared_ptr<UserInterface> ui;
+			std::shared_ptr<UserInterface> ui;
 	};
+
 }
 
 #endif
-

@@ -1,11 +1,9 @@
 #ifndef USERINTERFACE_H
 #define USERINTERFACE_H
 
-#include <thread>
 
 #include "Module.hpp"
 
-using std::thread;
 
 namespace ProjectMaya {
 
@@ -14,19 +12,17 @@ namespace ProjectMaya {
 	 */
 	class UserInterface : public Module {
 		public:
-			explicit UserInterface();
-			~UserInterface() = default;
 
 		protected:
-			void run();
+			void run() override;
 
 		private:
-			void initGLFW();
-			void initOpenGL();
-			void render();
+			void initGLFW() const;
+			void initOpenGL() const;
+			void render() const;
 
-			void renderOpenGL(const double&);
-			void renderScene();
+			void renderOpenGL(const double&) const;
+			void renderScene() const;
 	};
 
 }

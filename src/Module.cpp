@@ -4,6 +4,10 @@
 
 using std::bind;
 using std::lock_guard;
+using std::mutex;
+using std::atomic;
+using std::thread;
+using std::unique_ptr;
 
 using namespace ProjectMaya;
 
@@ -23,7 +27,7 @@ Module::~Module() {
 }
 
 void Module::start() {
-	 lock_guard<mutex> memberGuard(this->memberMutex);
+	lock_guard<mutex> memberGuard(this->memberMutex);
 
 	if (!this->started.load()) {
 		// get phase relevant lock
@@ -84,15 +88,14 @@ void Module::threadFunc() {
 	}
 }
 
-bool Module::wasStarted() {
+bool Module::wasStarted() const {
 	return this->started.load();
 }
 
-bool Module::wasStopped() {
+bool Module::wasStopped() const {
 	return this->stopped.load();
 }
 
-bool Module::shouldShutdown() {
+bool Module::shouldShutdown() const {
 	return this->shutdown.load();
 }
-
