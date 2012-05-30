@@ -10,8 +10,10 @@ using std::runtime_error;
 
 using namespace ProjectMaya;
 
-
 UserInterface::UserInterface() {
+}
+
+void UserInterface::run() {
 	initGLFW();
 	initOpenGL();
 	render();
@@ -51,7 +53,7 @@ void UserInterface::render() {
 	double currentTime;
 	double deltaRotate = 0.0;
 
-	while(running) {
+	while(running && !this->shouldShutdown()) {
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
 		oldTime = currentTime;

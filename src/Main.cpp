@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "UserInterface.hpp"
+#include "App.hpp"
 
 using std::cout;
 using std::endl;
@@ -13,7 +13,8 @@ int main() {
 
 	{
 		/* e.g. construct the user interface, do other initialization */
-		UserInterface ui;
+		App app;
+		app.waitForShutdown();
 	}
 
 	cout << "user interface destroyed, shutting down" << endl;
