@@ -1,5 +1,5 @@
 #ifndef MODULE_H
-#define MOUDLE_H
+#define MODULE_H
 
 #include <atomic>
 #include <memory>
@@ -9,6 +9,9 @@
 
 namespace ProjectMaya {
 
+	/**
+	 * Basic module, with fine-grained functionality, running independent from each other.
+	 */
 	class Module {
 		public:
 			explicit Module();
@@ -22,8 +25,11 @@ namespace ProjectMaya {
 			bool wasStopped() const;
 
 		protected:
+			/// Initializes the module.
 			virtual void init(){};
+			/// Runs the module specific service.
 			virtual void run(){};
+			/// Cleans the module specific garbage.
 			virtual void cleanup(){};
 			bool shouldShutdown() const;
 

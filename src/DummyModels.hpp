@@ -8,7 +8,7 @@ namespace ProjectMaya {
 
 	/**
 	 * Data for a const Dummy Box.
-	 * You probably have to scale the values to your needs
+	 * You probably have to scale the values to your needs.
 	 */
 	namespace DummyBox {
 		static const GLfloat back[] = {
@@ -39,6 +39,10 @@ namespace ProjectMaya {
 		};
 	};
 
+	/**
+	 * Data for a const Triangle.
+	 * You probably have to scale the values to your needs.
+	 */
 	namespace DummyTriangle {
 		static const GLfloat stripes[] = {
 			0.0f, 0.0f, 0.0f,

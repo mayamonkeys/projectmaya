@@ -8,6 +8,9 @@
 
 namespace ProjectMaya {
 
+	/**
+	 * Basic app, consisting of modules.
+	 */
 	class App {
 		public:
 			App();

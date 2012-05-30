@@ -8,7 +8,7 @@
 namespace ProjectMaya {
 
 	/**
-	 * Represents the basic user itnerface.
+	 * Represents the basic user interface.
 	 */
 	class UserInterface : public Module {
 		public:
