@@ -15,7 +15,10 @@ namespace ProjectMaya {
 	 */
 	class App {
 		public:
+			/// Starts all modules.
 			App();
+			/// Stops all modules.
+			~App();
 			App& operator=(const App& obj) = delete;
 			void waitForShutdown() const;
 

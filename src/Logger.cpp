@@ -61,11 +61,6 @@ void Logger::run() {
 	}
 }
 
-bool Logger::exitRequested() {
-	lock_guard<mutex> memberGuard(this->memberMutex);
-	return this->exit;
-}
-
 void Logger::log(const string msg) {
 	lock_guard<mutex> memberGuard(this->memberMutex);
 

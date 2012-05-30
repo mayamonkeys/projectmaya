@@ -27,7 +27,6 @@ namespace ProjectMaya {
 		private:
 			std::mutex memberMutex;
 			std::queue<const std::string> msgQueue;
-			bool exit = false;
 	};
 
 }
