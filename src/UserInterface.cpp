@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <GL/glfw.h>
 
+#include <config.h>
+
 #include "UserInterface.hpp"
 #include "DummyModels.hpp"
 
@@ -20,16 +22,16 @@ void UserInterface::initGLFW() {
 		throw new runtime_error("could not initialize glfw");
 	}
 
+	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 0);
+
 	if(!glfwOpenWindow(800, 480, 0, 0, 0, 0, GLFW_DEPTH_BITS, 0, GLFW_WINDOW)) {
 		glfwTerminate();
 		throw new runtime_error("could not create glfw window");
 	}
 
-	glfwSetWindowTitle("Project Maya");
-
-	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 0);
+	glfwSetWindowTitle(NAME " - " REVISION);
 }
 
 void UserInterface::initOpenGL() {
