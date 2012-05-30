@@ -10,6 +10,10 @@
 # special Linux files
 .directory
 
+# doxygen
+doc/doxygen/html
+doc/doxygen/latex
+
 # special Windows files
 Desktop.ini
 Thumbs.db
@@ -33,4 +37,3 @@ build
 
 # crash dumps
 core.*
-
