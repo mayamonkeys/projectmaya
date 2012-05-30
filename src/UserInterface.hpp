@@ -14,7 +14,9 @@ namespace ProjectMaya {
 		public:
 
 		protected:
+			void init() override;
 			void run() override;
+			void cleanup() override;
 
 		private:
 			void initGLFW() const;

@@ -10,10 +10,17 @@ using std::runtime_error;
 
 using namespace ProjectMaya;
 
-void UserInterface::run() {
+void UserInterface::init() {
 	initGLFW();
 	initOpenGL();
+}
+
+void UserInterface::run() {
 	render();
+}
+
+void UserInterface::cleanup() {
+	glfwTerminate();
 }
 
 void UserInterface::initGLFW() const {
@@ -62,8 +69,6 @@ void UserInterface::render() const {
 
 		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
 	}
-
-	glfwTerminate();
 }
 
 /* for now pass the rotation value as argument */
