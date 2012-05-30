@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "InteractionHandler.hpp"
 #include "UserInterface.hpp"
 
 
@@ -18,6 +19,7 @@ namespace ProjectMaya {
 			void waitForShutdown() const;
 
 		private:
+			std::shared_ptr<InteractionHandler> ih;
 			std::shared_ptr<UserInterface> ui;
 	};
 

@@ -1,3 +1,4 @@
+#include <functional>
 #include <stdexcept>
 #include <GL/glfw.h>
 
@@ -6,9 +7,24 @@
 #include "UserInterface.hpp"
 #include "DummyModels.hpp"
 
+using std::bind;
+using std::function;
 using std::runtime_error;
+using std::shared_ptr;
 
+using namespace std::placeholders;
 using namespace ProjectMaya;
+
+// c callbacks
+typedef function<void(int, int)> TkeyCallbackFunc;
+TkeyCallbackFunc keyCallbackFunc;
+void keyCallbackC(int id, int state) {
+	keyCallbackFunc(id, state);
+}
+
+UserInterface::UserInterface(shared_ptr<InteractionHandler> ih) {
+	this->ih = ih;
+}
 
 void UserInterface::init() {
 	initGLFW();
@@ -23,7 +39,7 @@ void UserInterface::cleanup() {
 	glfwTerminate();
 }
 
-void UserInterface::initGLFW() const {
+void UserInterface::initGLFW() {
 	if(!glfwInit()) {
 		throw new runtime_error("could not initialize glfw");
 	}
@@ -38,6 +54,10 @@ void UserInterface::initGLFW() const {
 	}
 
 	glfwSetWindowTitle(NAME " - " REVISION);
+
+	// set callbacks
+	keyCallbackFunc = bind(&UserInterface::keyCallback, this, _1, _2);
+	glfwSetKeyCallback(&keyCallbackC);
 }
 
 void UserInterface::initOpenGL() const {
@@ -51,13 +71,11 @@ void UserInterface::initOpenGL() const {
 
 /* main render loop */
 void UserInterface::render() const {
-	int running = GL_TRUE;
-
 	double oldTime = glfwGetTime();
 	double currentTime;
 	double deltaRotate = 0.0;
 
-	while(running && !this->shouldShutdown()) {
+	while(glfwGetWindowParam(GLFW_OPENED) && !this->ih->exitRequested() && !this->shouldShutdown()) {
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
 		oldTime = currentTime;
@@ -66,8 +84,6 @@ void UserInterface::render() const {
 		renderScene();
 
 		glfwSwapBuffers();
-
-		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
 	}
 }
 
@@ -120,3 +136,12 @@ void UserInterface::renderScene() const {
 
 	glEnd();
 }
+
+void UserInterface::keyCallback(int id, int state) {
+	if (state == GL_TRUE) {
+		this->ih->newKeyEvent(true, id);
+	} else {
+		this->ih->newKeyEvent(false, id);
+	}
+}
+
