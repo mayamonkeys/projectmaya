@@ -14,7 +14,7 @@
    id="svg5271"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="New document 3">
+   sodipodi:docname="middle-withStrip.svg">
   <defs
      id="defs5273" />
   <sodipodi:namedview
@@ -22,10 +22,10 @@
      pagecolor="#787878"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="1"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="164.68544"
+     inkscape:cx="80.085165"
      inkscape:cy="184.49747"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -60,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -69,6 +69,14 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-698.03203)">
+    <rect
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="rect8115"
+       width="354.33072"
+       height="354.33072"
+       x="0"
+       y="-2.0184854e-05"
+       transform="translate(0,698.03203)" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect5283"

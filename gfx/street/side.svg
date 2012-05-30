@@ -14,7 +14,7 @@
    id="svg5271"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="middle-withoutStrip.svg">
+   sodipodi:docname="side.svg">
   <defs
      id="defs5273" />
   <sodipodi:namedview
@@ -22,7 +22,7 @@
      pagecolor="#787878"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="1"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
      inkscape:cx="194.56285"
@@ -60,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -141,5 +141,13 @@
        d="m 354.33071,1016.9296 -354.33071,0 0,0"
        id="path6058"
        inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#787878;fill-opacity:1;stroke:none"
+       id="rect8697"
+       width="354.33072"
+       height="159.44882"
+       x="0"
+       y="-2.0184854e-05"
+       transform="translate(0,698.03203)" />
   </g>
 </svg>
