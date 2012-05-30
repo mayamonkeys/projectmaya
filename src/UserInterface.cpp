@@ -1,8 +1,6 @@
 #include <stdexcept>
 #include <GL/glfw.h>
 
-#include <config.h>
-
 #include "UserInterface.hpp"
 #include "DummyModels.hpp"
 
@@ -78,7 +76,7 @@ void UserInterface::renderOpenGL(const double& deltaRotate) {
 
 /* render some examples, by using different methods */
 void UserInterface::renderScene() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glColor4f(1.0f, 0.3f, 0.0f, 0.6f);
 
 	/* scale our box down */
@@ -91,16 +89,16 @@ void UserInterface::renderScene() {
 	/* Method 2: Copy arrays to graphics card and draw at once, medium performance */
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	{
-		glVertexPointer(3, GL_FLOAT, 0, DummyBox::front);
-		glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::front) / sizeof(GLfloat)) / 3);
 
-		glVertexPointer(3, GL_FLOAT, 0, DummyBox::back);
-		glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::back) / sizeof(GLfloat)) / 3);
+	glVertexPointer(3, GL_FLOAT, 0, DummyBox::front);
+	glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::front) / sizeof(GLfloat)) / 3);
 
-		glVertexPointer(3, GL_FLOAT, 0, DummyBox::join);
-		glDrawArrays(GL_LINES, 0, (sizeof(DummyBox::join) / sizeof(GLfloat)) / 3);
-	}
+	glVertexPointer(3, GL_FLOAT, 0, DummyBox::back);
+	glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::back) / sizeof(GLfloat)) / 3);
+
+	glVertexPointer(3, GL_FLOAT, 0, DummyBox::join);
+	glDrawArrays(GL_LINES, 0, (sizeof(DummyBox::join) / sizeof(GLfloat)) / 3);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 
@@ -109,10 +107,10 @@ void UserInterface::renderScene() {
 	glFrontFace(GL_CW);
 
 	glBegin(GL_TRIANGLE_STRIP);
-	{
-		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(1.0f, 0.0f, 0.0f);
+
+	for(std::size_t i = 0; i < sizeof(DummyTriangle::stripes) / sizeof(GLfloat); i += 3) {
+		glVertex3f(DummyTriangle::stripes[i + 0], DummyTriangle::stripes[i + 1], DummyTriangle::stripes[i + 2]);
 	}
+
 	glEnd();
 }
