@@ -71,4 +71,3 @@ bool InteractionHandler::exitRequested() {
 	lock_guard<mutex> memberGuard(this->memberMutex);
 	return this->exit;
 }
-

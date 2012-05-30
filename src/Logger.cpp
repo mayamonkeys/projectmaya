@@ -34,8 +34,8 @@ void Logger::run() {
 		}
 
 		while(!empty) {
-			// get msg
 			string msg;
+			// get msg
 			{
 				lock_guard<mutex> memberGuard(this->memberMutex);
 				msg = this->msgQueue.front();
@@ -43,12 +43,8 @@ void Logger::run() {
 			}
 
 			// formatting: timestamp and message
-			{
-				lock_guard<mutex> memberGuard(this->memberMutex);
-
-				auto now = system_clock::to_time_t(system_clock::now());
-				clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
-			}
+			auto now = system_clock::to_time_t(system_clock::now());
+			clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
 
 			// get new queue status
 			{

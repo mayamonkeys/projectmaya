@@ -79,18 +79,12 @@ void UserInterface::render() const {
 	while(glfwGetWindowParam(GLFW_OPENED) && !this->ih->exitRequested() && !this->shouldShutdown()) {
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
-
-		/// \todo remove following two lines, they are for segfault testing
-		if((currentTime - oldTime) < 0.2) continue;
-		lg->log(1, "rendering frame");
-
 		oldTime = currentTime;
 
 		renderOpenGL(deltaRotate);
 		renderScene();
 
 		glfwSwapBuffers();
-
 	}
 }
 
@@ -151,4 +145,3 @@ void UserInterface::keyCallback(int id, int state) {
 		this->ih->newKeyEvent(false, id);
 	}
 }
-
