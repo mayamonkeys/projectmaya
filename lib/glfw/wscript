@@ -38,6 +38,11 @@ def configure(conf):
 	conf.env.append_unique('INCLUDES', path + '/include')
 
 def build(bld):
-	# make
-	bld(rule='make --directory=' + bld.env.GLFW_MAKEPATH + ' ' + bld.env.GLFW_MAKETARGET, name='glfw_make', always=True)
+	# make (force run)
+	taskgen_make = bld(rule='make --directory=' + bld.env.GLFW_MAKEPATH + ' ' + bld.env.GLFW_MAKETARGET, name='glfw_make', always=True)
+	taskgen_make.post()
+	task_make = taskgen_make.tasks[0]
+	task_make.run()
+	
 	bld.read_stlib('glfw', paths = [bld.env.GLFW_LIBPATH])
+	
