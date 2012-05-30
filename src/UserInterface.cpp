@@ -1,6 +1,8 @@
 #include <functional>
 #include <stdexcept>
 #include <GL/glfw.h>
+#include <iostream>
+#include <sstream>
 
 #include <config.h>
 
@@ -9,8 +11,10 @@
 
 using std::bind;
 using std::function;
+using std::noskipws;
 using std::runtime_error;
 using std::shared_ptr;
+using std::stringstream;
 
 using namespace std::placeholders;
 using namespace ProjectMaya;
@@ -44,6 +48,9 @@ void UserInterface::initGLFW() {
 	if(!glfwInit()) {
 		throw new runtime_error("could not initialize glfw");
 	}
+
+	/// \todo Implement mode selection, not just querying.
+	queryVideoModes();
 
 	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
@@ -144,4 +151,18 @@ void UserInterface::keyCallback(int id, int state) {
 	} else {
 		this->ih->newKeyEvent(false, id);
 	}
+}
+
+void UserInterface::queryVideoModes() const {
+	GLFWvidmode list[200];
+	int nummodes = glfwGetVideoModes(list, 200);
+
+	stringstream stream;
+
+	stream << noskipws << "detected video modes: ";
+
+	for(int i = 0; i < nummodes; ++i)
+		 stream << list[i].Width << "x" << list[i].Height << " ";
+
+	*lg << stream.str();
 }

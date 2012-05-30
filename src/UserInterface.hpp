@@ -34,6 +34,8 @@ namespace ProjectMaya {
 			void renderScene() const;
 
 			void keyCallback(int id, int state);
+
+			void queryVideoModes() const;
 	};
 
 }
