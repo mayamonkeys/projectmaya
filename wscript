@@ -12,6 +12,9 @@ name = 'Project Maya'
 
 def options(opt):
 	opt.load('compiler_cxx')
+	group = opt.add_option_group(name + ' specific options')
+	group.add_option('-d', '--debug', dest='debug', default=False, action='store_true', help='enables debug build (used by developers)')
+	group.add_option('-r', '--release', dest='release', default=False, action='store_true', help='enables optimized release build')
 
 def configure(conf):
 	conf.load('compiler_cxx')
@@ -19,12 +22,19 @@ def configure(conf):
 	conf.env.NAME = name
 	
 	# check compiler flags
-	conf.check_cxx(cxxflags='-Wall', uselib_store='DEFAULT')
+	if conf.options.debug:
+		conf.check_cxx(cxxflags='-Wall', uselib_store='DEFAULT')
+		conf.check_cxx(cxxflags='-Wextra', uselib_store='DEFAULT')
+		conf.check_cxx(cxxflags='-g', uselib_store='DEFAULT')
+	if conf.options.release:
+		conf.check_cxx(cxxflags='-O2', uselib_store='DEFAULT')
 	conf.check_cxx(cxxflags='-std=c++0x', uselib_store='DEFAULT')
 	conf.env.append_unique('CXXFLAGS', conf.env.CXXFLAGS_DEFAULT)
 	
 	# check stdlib headers
-	conf.check_cxx(header_name='thread', cxxflags = conf.env.CXXFLAGS)
+	stdheaders = ['atomic', 'chrono', 'functional', 'iostream', 'memory', 'mutex', 'queue', 'sstream', 'stdexcept', 'string', 'thread']
+	for header in stdheaders:
+		conf.check_cxx(header_name=header, cxxflags = conf.env.CXXFLAGS)
 	
 	# config libs
 	conf.recurse('lib')
