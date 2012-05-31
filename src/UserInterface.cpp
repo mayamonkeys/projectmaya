@@ -164,5 +164,5 @@ void UserInterface::queryVideoModes() const {
 	for(int i = 0; i < nummodes; ++i)
 		 stream << list[i].Width << "x" << list[i].Height << " ";
 
-	*lg << stream.str();
+	lg->log("UserInterface", stream.str());
 }

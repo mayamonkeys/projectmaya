@@ -443,16 +443,6 @@ IF(ALSOFT_CONFIG)
     )
 ENDIF()
 
-IF(EXAMPLES)
-    ADD_EXECUTABLE(openal-info examples/openal-info.c)
-    TARGET_LINK_LIBRARIES(openal-info ${LIBNAME})
-    INSTALL(TARGETS openal-info
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-            ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-    )
-ENDIF()
-
 MESSAGE(STATUS "")
 MESSAGE(STATUS "Building OpenAL with support for the following backends:")
 MESSAGE(STATUS "    ${BACKENDS}")

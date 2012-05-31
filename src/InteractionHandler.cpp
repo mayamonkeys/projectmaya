@@ -38,7 +38,7 @@ void InteractionHandler::run() {
 			}
 
 			/// \todo do something with the information
-			lg->log("key pressed");
+			lg->log("InteractionHandler", "key pressed");
 
 			if (event.keyCode == GLFW_KEY_ESC) {
 				this->exit = true;

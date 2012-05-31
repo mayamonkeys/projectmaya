@@ -1,3 +1,4 @@
+
 #ifndef APP_H
 #define APP_H
 
@@ -6,6 +7,10 @@
 #include "InteractionHandler.hpp"
 #include "Logger.hpp"
 #include "UserInterface.hpp"
+
+#ifdef FIXME /// \todo buildsystem for openal
+#include "SoundHandler.hpp"
+#endif
 
 
 namespace ProjectMaya {
@@ -26,6 +31,9 @@ namespace ProjectMaya {
 			std::shared_ptr<InteractionHandler> ih;
 			std::shared_ptr<Logger> lg;
 			std::shared_ptr<UserInterface> ui;
+#ifdef FIXME /// \todo buildsystem for openal
+			std::shared_ptr<SoundHandler> sh;
+#endif
 	};
 
 }
