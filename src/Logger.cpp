@@ -57,7 +57,7 @@ void Logger::run() {
 	}
 }
 
-void Logger::log(const string msg) {
+void Logger::log(const string& msg) {
 	lock_guard<mutex> memberGuard(this->memberMutex);
 
 	stringstream stream;
@@ -66,7 +66,7 @@ void Logger::log(const string msg) {
 	this->msgQueue.push(stream.str());
 }
 
-void Logger::log(const int id, const string msg) {
+void Logger::log(const int& id, const string& msg) {
 	lock_guard<mutex> memberGuard(this->memberMutex);
 
 	stringstream stream;
@@ -75,7 +75,7 @@ void Logger::log(const int id, const string msg) {
 	this->msgQueue.push(stream.str());
 }
 
-void Logger::log(const string name, const string msg) {
+void Logger::log(const string& name, const string& msg) {
 	lock_guard<mutex> memberGuard(this->memberMutex);
 
 	stringstream stream;

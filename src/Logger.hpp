@@ -18,11 +18,11 @@ namespace ProjectMaya {
 			bool exitRequested();
 
 			/// Formats and logs the provided message.
-			void log(const std::string msg);
+			void log(const std::string& msg);
 			/// Formats and logs the specified id and the provided message.
-			void log(int id, const std::string msg);
+			void log(const int& id, const std::string& msg);
 			/// Formats and logs the name of the caller and the provided message.
-			void log(const std::string name, const std::string msg);
+			void log(const std::string& name, const std::string& msg);
 			/// Formats and logs the provided message.
 			Logger& operator<<(const std::string& msg) { log(msg); return *this; }
 
