@@ -17,15 +17,11 @@ namespace ProjectMaya {
 		public:
 			typedef std::function<TPayload*()> TPayloadCreator;
 
-			explicit Module(TPayloadCreator pc) {
-				this->phaseRun.lock();
-				this->phaseCleanup.lock();
-				this->readyInit.lock();
-				this->readyRun.lock();
-				this->started.store(false);
-				this->shutdown.store(false);
-				this->creator = pc;
-				this->myThread = std::unique_ptr<std::thread>(new std::thread(std::bind(&Module::threadFunc, this)));
+			explicit Module(const TPayloadCreator& pc) : creator(pc) {
+				this->startThread();
+			}
+			explicit Module(TPayloadCreator&& pc) : creator(std::move(pc)) {
+				this->startThread();
 			}
 			Module(const Module& obj) = delete;
 			Module(Module&& obj) = delete;
@@ -142,6 +138,16 @@ namespace ProjectMaya {
 
 				std::lock_guard<std::mutex> cleanupGuard(this->phaseCleanup);
 				delete this->payload;
+			}
+
+			void startThread() {
+				this->phaseRun.lock();
+				this->phaseCleanup.lock();
+				this->readyInit.lock();
+				this->readyRun.lock();
+				this->started.store(false);
+				this->shutdown.store(false);
+				this->myThread = std::unique_ptr<std::thread>(new std::thread(std::bind(&Module::threadFunc, this)));
 			}
 	};
 
