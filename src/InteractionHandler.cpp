@@ -13,11 +13,11 @@ using std::mutex;
 using std::shared_ptr;
 using std::this_thread::sleep_for;
 
-InteractionHandler::InteractionHandler(shared_ptr<Logger> lg) {
+InteractionHandler::InteractionHandler(shared_ptr<Module<Logger>> lg) {
 	this->lg = lg;
 }
 
-void InteractionHandler::run() {
+void InteractionHandler::operator()() {
 	milliseconds stime(20);
 
 	while(!this->shouldShutdown()) {
@@ -38,7 +38,7 @@ void InteractionHandler::run() {
 			}
 
 			/// \todo do something with the information
-			lg->log("InteractionHandler", "key pressed");
+			(**lg).log("InteractionHandler", "key pressed");
 
 			if (event.keyCode == GLFW_KEY_ESC) {
 				this->exit = true;

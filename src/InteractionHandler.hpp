@@ -4,15 +4,16 @@
 #include <mutex>
 #include <queue>
 
-#include "Module.hpp"
 #include "Logger.hpp"
+#include "Module.hpp"
+#include "ShutdownHelper.hpp"
 
 namespace ProjectMaya {
 
-	class InteractionHandler : public Module {
+	class InteractionHandler : public ShutdownHelper {
 		public:
-			InteractionHandler(std::shared_ptr<Logger> lg);
-			void run() override;
+			InteractionHandler(std::shared_ptr<Module<Logger>> lg);
+			void operator()();
 
 			void newKeyEvent(bool pressed, int keyCode);
 
@@ -24,7 +25,7 @@ namespace ProjectMaya {
 				int keyCode;
 			};
 
-			std::shared_ptr<Logger> lg;
+			std::shared_ptr<Module<Logger>> lg;
 
 			std::mutex memberMutex;
 			std::queue<KeyEvent> keyQueue;

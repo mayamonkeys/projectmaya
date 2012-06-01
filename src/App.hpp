@@ -1,4 +1,3 @@
-
 #ifndef APP_H
 #define APP_H
 
@@ -6,11 +5,8 @@
 
 #include "InteractionHandler.hpp"
 #include "Logger.hpp"
+#include "Module.hpp"
 #include "UserInterface.hpp"
-
-#ifdef FIXME /// \todo buildsystem for openal
-#include "SoundHandler.hpp"
-#endif
 
 
 namespace ProjectMaya {
@@ -28,12 +24,9 @@ namespace ProjectMaya {
 			void waitForShutdown() const;
 
 		private:
-			std::shared_ptr<InteractionHandler> ih;
-			std::shared_ptr<Logger> lg;
-			std::shared_ptr<UserInterface> ui;
-#ifdef FIXME /// \todo buildsystem for openal
-			std::shared_ptr<SoundHandler> sh;
-#endif
+			std::shared_ptr<Module<InteractionHandler>> mInteractionHandler;
+			std::shared_ptr<Module<Logger>> mLogger;
+			std::shared_ptr<Module<UserInterface>> mUserInterface;
 	};
 
 }

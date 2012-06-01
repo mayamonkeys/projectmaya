@@ -26,22 +26,19 @@ void keyCallbackC(int id, int state) {
 	keyCallbackFunc(id, state);
 }
 
-UserInterface::UserInterface(shared_ptr<InteractionHandler> ih, shared_ptr<Logger> lg) {
+UserInterface::UserInterface(shared_ptr<Module<InteractionHandler>> ih, shared_ptr<Module<Logger>> lg) {
 	this->ih = ih;
 	this->lg = lg;
 }
 
-void UserInterface::init() {
+UserInterface::~UserInterface() {
+	glfwTerminate();
+}
+
+void UserInterface::operator()() {
 	initGLFW();
 	initOpenGL();
-}
-
-void UserInterface::run() {
 	render();
-}
-
-void UserInterface::cleanup() {
-	glfwTerminate();
 }
 
 void UserInterface::initGLFW() {
@@ -83,7 +80,7 @@ void UserInterface::render() const {
 	double currentTime;
 	double deltaRotate = 0.0;
 
-	while(glfwGetWindowParam(GLFW_OPENED) && !this->ih->exitRequested() && !this->shouldShutdown()) {
+	while(glfwGetWindowParam(GLFW_OPENED) && !(**this->ih).exitRequested() && !this->shouldShutdown()) {
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
 		oldTime = currentTime;
@@ -147,9 +144,9 @@ void UserInterface::renderScene() const {
 
 void UserInterface::keyCallback(int id, int state) {
 	if (state == GL_TRUE) {
-		this->ih->newKeyEvent(true, id);
+		(**this->ih).newKeyEvent(true, id);
 	} else {
-		this->ih->newKeyEvent(false, id);
+		(**this->ih).newKeyEvent(false, id);
 	}
 }
 
@@ -164,5 +161,5 @@ void UserInterface::queryVideoModes() const {
 	for(int i = 0; i < nummodes; ++i)
 		 stream << list[i].Width << "x" << list[i].Height << " ";
 
-	lg->log("UserInterface", stream.str());
+	(**this->lg).log("UserInterface", stream.str());
 }

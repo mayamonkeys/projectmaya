@@ -8,35 +8,32 @@ using namespace ProjectMaya;
  * \warning Order of construction.
  */
 App::App() {
-	this->lg = shared_ptr<Logger>(new Logger);
-	this->ih = shared_ptr<InteractionHandler>(new InteractionHandler(this->lg));
-#ifdef FIXME /// \todo buildsystem for openal
-	this->sh = shared_ptr<SoundHandler>(new SoundHandler(this->lg));
-#endif
-	this->ui = shared_ptr<UserInterface>(new UserInterface(this->ih, this->lg));
+	// async constructors
+	this->mLogger = shared_ptr<Module<Logger>>(createModule<Logger>());
+	this->mInteractionHandler = shared_ptr<Module<InteractionHandler>>(createModule<InteractionHandler>(this->mLogger));
+	this->mUserInterface = shared_ptr<Module<UserInterface>>(createModule<UserInterface>(this->mInteractionHandler, this->mLogger));
+
+	// wait
+	this->mLogger->waitForConstructor();
+	this->mLogger->waitForConstructor();
+	this->mUserInterface->waitForConstructor();
 }
 
 /**
  * \warning Order of destruction.
  */
 App::~App() {
-#ifdef FIXME /// \todo buildsystem for openal
-	sh->stop();
-#endif
-	ui->stop();
-	ih->stop();
-	lg->stop();
+	this->mUserInterface->stop();
+	this->mInteractionHandler->stop();
+	this->mLogger->stop();
 }
 
 /**
  * \warning Order of starting.
  */
 void App::waitForShutdown() const {
-	this->lg->start();
-	this->ih->start();
-#ifdef FIXME /// \todo buildsystem for openal
-	this->sh->start();
-#endif
-	this->ui->start();
-	this->ui->join();
+	this->mLogger->start();
+	this->mInteractionHandler->start();
+	this->mUserInterface->start();
+	this->mUserInterface->join();
 }

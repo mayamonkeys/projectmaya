@@ -1,9 +1,9 @@
 #include <ctime>
 #include <iomanip>
-
 #include <chrono>
 #include <iostream>
 #include <sstream>
+#include <thread>
 
 #include "Logger.hpp"
 
@@ -22,7 +22,7 @@ using std::noskipws;
 using std::put_time;
 using std::this_thread::sleep_for;
 
-void Logger::run() {
+void Logger::operator()() {
 	milliseconds stime(20);
 
 	while(!this->shouldShutdown()) {

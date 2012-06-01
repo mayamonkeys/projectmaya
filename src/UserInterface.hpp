@@ -6,6 +6,7 @@
 #include "InteractionHandler.hpp"
 #include "Logger.hpp"
 #include "Module.hpp"
+#include "ShutdownHelper.hpp"
 
 
 namespace ProjectMaya {
@@ -13,18 +14,15 @@ namespace ProjectMaya {
 	/**
 	 * Represents the basic user interface.
 	 */
-	class UserInterface : public Module {
+	class UserInterface : public ShutdownHelper {
 		public:
-			UserInterface(std::shared_ptr<InteractionHandler> ih, std::shared_ptr<Logger> lg);
-
-		protected:
-			void init() override;
-			void run() override;
-			void cleanup() override;
+			UserInterface(std::shared_ptr<Module<InteractionHandler>> ih, std::shared_ptr<Module<Logger>> lg);
+			~UserInterface();
+			void operator()();
 
 		private:
-			std::shared_ptr<InteractionHandler> ih;
-			std::shared_ptr<Logger> lg;
+			std::shared_ptr<Module<InteractionHandler>> ih;
+			std::shared_ptr<Module<Logger>> lg;
 
 			void initGLFW();
 			void initOpenGL() const;
