@@ -84,7 +84,11 @@ void ReusableThread::threadFunc(std::shared_ptr<THelper> helper) {
 		{
 			lock_guard<mutex> runGuard(helper->runMutex);
 			helper->stepBeginMutex.unlock();
-			helper->payload();
+			try {
+				helper->payload();
+			} catch(...) {
+				/* nop */
+			}
 		}
 		helper->stepEndMutex.lock();
 	}
