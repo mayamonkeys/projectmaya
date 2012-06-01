@@ -24,9 +24,9 @@ namespace ProjectMaya {
 			void waitForShutdown() const;
 
 		private:
-			std::shared_ptr<Module<InteractionHandler>> mInteractionHandler;
-			std::shared_ptr<Module<Logger>> mLogger;
-			std::shared_ptr<Module<UserInterface>> mUserInterface;
+			std::shared_ptr<Module> mInteractionHandler;
+			std::shared_ptr<Module> mLogger;
+			std::shared_ptr<Module> mUserInterface;
 	};
 
 }

@@ -1,4 +1,7 @@
 #include "App.hpp"
+#include "ReusableThread.hpp"
+#include <iostream>
+#include <memory>
 
 using std::shared_ptr;
 
@@ -9,9 +12,9 @@ using namespace ProjectMaya;
  */
 App::App() {
 	// async constructors
-	this->mLogger = shared_ptr<Module<Logger>>(createModule<Logger>());
-	this->mInteractionHandler = shared_ptr<Module<InteractionHandler>>(createModule<InteractionHandler>(this->mLogger));
-	this->mUserInterface = shared_ptr<Module<UserInterface>>(createModule<UserInterface>(this->mInteractionHandler, this->mLogger));
+	this->mLogger = shared_ptr<Module>(Module::create<Logger>());
+	this->mInteractionHandler = shared_ptr<Module>(Module::create<InteractionHandler>(this->mLogger));
+	this->mUserInterface = shared_ptr<Module>(Module::create<UserInterface>(this->mInteractionHandler, this->mLogger));
 
 	// wait
 	this->mLogger->waitForConstructor();
@@ -23,17 +26,33 @@ App::App() {
  * \warning Order of destruction.
  */
 App::~App() {
-	this->mUserInterface->stop();
-	this->mInteractionHandler->stop();
-	this->mLogger->stop();
+	// destroy
 }
 
 /**
  * \warning Order of starting.
  */
 void App::waitForShutdown() const {
+	// start
 	this->mLogger->start();
 	this->mInteractionHandler->start();
 	this->mUserInterface->start();
+
+	// run and wait for ui to shutdown
 	this->mUserInterface->join();
+
+	// async shutdown
+	this->mUserInterface->stop();
+	this->mInteractionHandler->stop();
+	this->mLogger->stop();
+
+	// wait
+	this->mUserInterface->waitForShutdown();
+	this->mInteractionHandler->waitForShutdown();
+	this->mLogger->waitForShutdown();
+
+	// async destroy (destructors will wait later)
+	this->mUserInterface->destroy();
+	this->mInteractionHandler->destroy();
+	this->mLogger->destroy();
 }

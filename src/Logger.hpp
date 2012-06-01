@@ -5,16 +5,16 @@
 #include <mutex>
 #include <queue>
 
-#include "ShutdownHelper.hpp"
+#include "ModulePayload.hpp"
 
 namespace ProjectMaya {
 
 	/**
 	 * Simple threadsafe, queue based, logger.
 	 */
-	class Logger : public ShutdownHelper {
+	class Logger : public ModulePayload {
 		public:
-			void operator()();
+			void operator()() override;
 
 			/// Formats and logs the provided message.
 			void log(const std::string& msg);
