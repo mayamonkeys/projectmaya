@@ -38,7 +38,7 @@ GDB is the GNU Debugger. We'll need a recent version of it, in order to work wit
 	git clone --depth 1 git://sourceware.org/git/gdb.git
 	cd gdb
 	git checkout gdb_7_4_1-2012-04-26-release
-	CC="gcc-4.7" CXX="g++-4.7" ./configure --prefix=/usr/local --program-suffix=-7.4 --enable-gold --enable-cloog-backend=isl --enable-lto --with-mpc=/usr/local --with-mpc=/usr/local --with-gmp=/usr/local --with-ppl=/usr/local --with-cloog=/usr/local
+	CC="gcc-4.7" CXX="g++-4.7" ./configure --prefix=/usr/local --program-suffix=-7.4 --enable-gold --enable-cloog-backend=isl --enable-lto --with-mpc=/usr/local --with-mpfr=/usr/local --with-gmp=/usr/local --with-ppl=/usr/local --with-cloog=/usr/local
 	make
 	sudo make install
 
