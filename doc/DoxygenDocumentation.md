@@ -44,6 +44,6 @@ Building the documentation
 
 Now you are able to build the html documentation and view it in your browser.
 
-	cd doc/doxygen
+	cd doc/Doxygen
 	doxygen Doxyfile
 	chrome html/index.html

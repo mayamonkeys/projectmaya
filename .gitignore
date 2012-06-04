@@ -11,8 +11,8 @@
 .directory
 
 # doxygen
-doc/doxygen/html
-doc/doxygen/latex
+doc/Doxygen/html
+doc/Doxygen/latex
 
 # special Windows files
 Desktop.ini
