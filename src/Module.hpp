@@ -19,7 +19,7 @@ namespace ProjectMaya {
 
 			template <typename TPayload, typename... TParams>
 			static Module* create(TParams... params) {
-				return new Module([&]{
+				return new Module([=]{
 						return new TPayload(params...);
 				});
 			}
