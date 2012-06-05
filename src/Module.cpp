@@ -1,4 +1,5 @@
 #include <functional>
+#include <utility>
 
 #include "Module.hpp"
 
@@ -8,15 +9,31 @@ using std::bind;
 using std::lock_guard;
 using std::mutex;
 using std::recursive_mutex;
+using std::shared_ptr;
 using std::thread;
 using std::unique_ptr;
 
-Module::Module(const TPayloadCreator& pc) : creator(pc) {
+Module::Module(const TPayloadCreator& pc) {
+	this->helper = shared_ptr<THelper>(new THelper);
+	this->helper->creator = pc;
 	this->startThread();
 }
 
-Module::Module(TPayloadCreator&& pc) : creator(std::move(pc)) {
+Module::Module(TPayloadCreator&& pc) {
+	this->helper = shared_ptr<THelper>(new THelper);
+	this->helper->creator = std::move(pc);
 	this->startThread();
+}
+
+Module::Module(Module&& obj) {
+	lock_guard<recursive_mutex> memberGuard(obj.memberMutex);
+
+	// create dummy modul
+	this->startThread();
+
+	// swap
+	std::swap(this->helper, obj.helper);
+	std::swap(this->myThread, obj.myThread);
 }
 
 Module::~Module(){
@@ -24,7 +41,7 @@ Module::~Module(){
 
 	// get phase relevant lock
 	{
-		lock_guard<mutex> readyGuard(this->readyInit);
+		lock_guard<mutex> readyGuard(this->helper->readyInit);
 	}
 
 	this->destroy();
@@ -34,109 +51,109 @@ Module::~Module(){
 }
 
 bool Module::shouldShutdown() {
-	return this->shutdown.load();
+	return this->helper->shutdown.load();
 }
 
 bool Module::shouldDestroy() {
-	return this->destroyed.load();
+	return this->helper->destroyed.load();
 }
 
 void Module::start() {
 	lock_guard<recursive_mutex> memberGuard(this->memberMutex);
 
-	if (!this->started.load()) {
+	if (!this->helper->started.load()) {
 		// get phase relevant lock
 		{
-			lock_guard<mutex> readyGuard(this->readyInit);
+			lock_guard<mutex> readyGuard(this->helper->readyInit);
 		}
 
 		// fire up phase
-		this->phaseRun.unlock();
+		this->helper->phaseRun.unlock();
 
 		// save state
-		this->started.store(true);
+		this->helper->started.store(true);
 	}
 }
 
 void Module::stop() {
 	lock_guard<recursive_mutex> memberGuard(this->memberMutex);
 
-	if (!this->shutdown.load()) {
+	if (!this->helper->shutdown.load()) {
 		// get phase relevant locks
 		{
-			lock_guard<mutex> readyGuard(this->readyInit);
+			lock_guard<mutex> readyGuard(this->helper->readyInit);
 		}
 
 		// signal shutdown
-		this->payload->shutdown();
+		this->helper->payload->shutdown();
 
 		// if not started, then do it
 		this->start();
 
 		// store state
-		this->shutdown.store(true);
+		this->helper->shutdown.store(true);
 	}
 }
 
 void Module::destroy() {
 	lock_guard<recursive_mutex> memberGuard(this->memberMutex);
 
-	if (!this->destroyed.load()) {
+	if (!this->helper->destroyed.load()) {
 		// get phase relevant locks
 		{
-			lock_guard<mutex> readyGuard(this->readyInit);
+			lock_guard<mutex> readyGuard(this->helper->readyInit);
 		}
 
 		// fire up phase
-		this->phaseCleanup.unlock();
+		this->helper->phaseCleanup.unlock();
 
 		// ensure shutdown
 		this->stop();
 
 		// store state
-		this->destroyed.store(true);
+		this->helper->destroyed.store(true);
 	}
 }
 
 void Module::waitForConstructor() {
-	lock_guard<mutex> phaseGuard(this->readyInit);
+	lock_guard<mutex> phaseGuard(this->helper->readyInit);
 }
 
 void Module::waitForShutdown() {
 	this->stop();
-	lock_guard<mutex> phaseGuard(this->readyRun);
+	lock_guard<mutex> phaseGuard(this->helper->readyRun);
 }
 
 void Module::join() {
 	this->start();
-	lock_guard<mutex> phaseGuard(this->readyRun);
+	lock_guard<mutex> phaseGuard(this->helper->readyRun);
 }
 
 bool Module::wasStarted() const {
-	return this->started.load();
+	return this->helper->started.load();
 }
 
-void Module::threadFunc() {
-	this->payload = this->creator();
-	this->readyInit.unlock();
+void Module::threadFunc(shared_ptr<THelper> helper) {
+	helper->payload = helper->creator();
+	helper->readyInit.unlock();
 
-	lock_guard<mutex> runGuard(this->phaseRun);
-	if (!this->shutdown.load()) {
-		(*this->payload)();
+	lock_guard<mutex> runGuard(helper->phaseRun);
+	if (!helper->shutdown.load()) {
+		(*helper->payload)();
 	}
-	this->readyRun.unlock();
+	helper->readyRun.unlock();
 
-	lock_guard<mutex> cleanupGuard(this->phaseCleanup);
-	delete this->payload;
+	lock_guard<mutex> cleanupGuard(helper->phaseCleanup);
+	delete helper->payload;
 }
 
 void Module::startThread() {
-	this->phaseRun.lock();
-	this->phaseCleanup.lock();
-	this->readyInit.lock();
-	this->readyRun.lock();
-	this->started.store(false);
-	this->shutdown.store(false);
-	this->destroyed.store(false);
-	this->myThread = unique_ptr<thread>(new thread(bind(&Module::threadFunc, this)));
+	this->helper->phaseRun.lock();
+	this->helper->phaseCleanup.lock();
+	this->helper->readyInit.lock();
+	this->helper->readyRun.lock();
+	this->helper->started.store(false);
+	this->helper->shutdown.store(false);
+	this->helper->destroyed.store(false);
+	this->myThread = unique_ptr<thread>(new thread(bind(&Module::threadFunc, this->helper)));
 }

@@ -27,15 +27,15 @@ namespace ProjectMaya {
 			explicit Module(const TPayloadCreator& pc);
 			explicit Module(TPayloadCreator&& pc);
 			~Module();
+			Module(Module&& obj);
 
 			Module(const Module& obj) = delete;
-			Module(Module&& obj) = delete;
 			Module& operator=(const Module& obj) = delete;
 			Module& operator=(Module&& obj) = delete;
 
 			template <typename TPayload>
 			TPayload& get() {
-				return static_cast<TPayload&>(*this->payload);
+				return static_cast<TPayload&>(*this->helper->payload);
 			}
 
 			bool wasStarted() const;
@@ -52,20 +52,23 @@ namespace ProjectMaya {
 
 
 		private:
-			TPayloadCreator creator;
-			ModulePayload* payload = nullptr;
+			struct THelper {
+				TPayloadCreator creator;
+				ModulePayload* payload = nullptr;
+				std::mutex phaseRun;
+				std::mutex phaseCleanup;
+				std::mutex readyInit;
+				std::mutex readyRun;
+				std::atomic<bool> started;
+				std::atomic<bool> shutdown;
+				std::atomic<bool> destroyed;
+			};
 
 			std::recursive_mutex memberMutex;
-			std::mutex phaseRun;
-			std::mutex phaseCleanup;
-			std::mutex readyInit;
-			std::mutex readyRun;
 			std::unique_ptr<std::thread> myThread;
-			std::atomic<bool> started;
-			std::atomic<bool> shutdown;
-			std::atomic<bool> destroyed;
+			std::shared_ptr<THelper> helper;
 
-			void threadFunc();
+			static void threadFunc(std::shared_ptr<THelper> helper);
 			void startThread();
 	};
 
