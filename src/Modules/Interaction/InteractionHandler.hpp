@@ -4,9 +4,9 @@
 #include <mutex>
 #include <queue>
 
-#include "Logger.hpp"
-#include "Module.hpp"
-#include "ModulePayload.hpp"
+#include "Modules/Log/Logger.hpp"
+#include "System/Module.hpp"
+#include "System/ModulePayload.hpp"
 
 namespace ProjectMaya {
 

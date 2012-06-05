@@ -5,7 +5,7 @@
 #include <mutex>
 #include <queue>
 
-#include "ModulePayload.hpp"
+#include "System/ModulePayload.hpp"
 
 namespace ProjectMaya {
 

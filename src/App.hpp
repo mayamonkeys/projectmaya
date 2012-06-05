@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Module.hpp"
+#include "System/Module.hpp"
 
 namespace ProjectMaya {
 

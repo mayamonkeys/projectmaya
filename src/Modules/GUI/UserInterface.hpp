@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "InteractionHandler.hpp"
-#include "Logger.hpp"
-#include "Module.hpp"
-#include "ModulePayload.hpp"
+#include "Modules/Interaction/InteractionHandler.hpp"
+#include "Modules/Log/Logger.hpp"
+#include "System/Module.hpp"
+#include "System/ModulePayload.hpp"
 
 
 namespace ProjectMaya {

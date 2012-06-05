@@ -5,8 +5,8 @@
 
 #include <lua.hpp>
 
-#include "Module.hpp"
-#include "ModulePayload.hpp"
+#include "System/Module.hpp"
+#include "System/ModulePayload.hpp"
 
 
 namespace ProjectMaya {

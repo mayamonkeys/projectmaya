@@ -1,9 +1,9 @@
 #include "App.hpp"
-#include "InteractionHandler.hpp"
-#include "Interpreter.hpp"
-#include "Logger.hpp"
-#include "SoundHandler.hpp"
-#include "UserInterface.hpp"
+#include "Modules/Interaction/InteractionHandler.hpp"
+#include "Modules/Scripting/Interpreter.hpp"
+#include "Modules/Log/Logger.hpp"
+#include "Modules/Sound/SoundHandler.hpp"
+#include "Modules/GUI/UserInterface.hpp"
 
 using std::shared_ptr;
 

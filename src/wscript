@@ -3,7 +3,13 @@
 
 import re
 
+def configure(conf):
+	path = conf.path.abspath()
+	
+	# add lib to env
+	conf.env.append_unique('INCLUDES', path)
+
 def build(bld):
-	files = bld.path.ant_glob('*.cpp')
+	files = bld.path.ant_glob('**/*.cpp')
 	name = re.sub('\W', '', bld.env.NAME).lower()
 	bld.program(source=files, target='../' + name, use='glfw openal lua')

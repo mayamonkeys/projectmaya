@@ -51,6 +51,9 @@ def configure(conf):
 	conf.env.append_unique('STLIB', stlibs)
 	conf.env.append_unique('LIB', libs)
 	
+	# config sources
+	conf.recurse('src')
+	
 	# get build informations
 	conf.define('REVISION', get_git_rev())
 	conf.define('BUILDTIME', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))

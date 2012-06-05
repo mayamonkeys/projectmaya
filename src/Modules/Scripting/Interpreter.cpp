@@ -3,10 +3,10 @@
 
 /// \warning we have to include lua before luabridge
 #include <lua.hpp>
-#include "LuaBridge.h"
+#include <LuaBridge.h>
 
 #include "Interpreter.hpp"
-#include "Logger.hpp"
+#include "Modules/Log/Logger.hpp"
 
 
 using namespace ProjectMaya;
