@@ -52,7 +52,7 @@ def configure(conf):
 	conf.env.append_unique('LIB', libs)
 	
 	# config sources
-	conf.recurse('src')
+	conf.recurse('source')
 	
 	# get build informations
 	conf.define('REVISION', get_git_rev())
@@ -68,7 +68,7 @@ def build(bld):
 	bld.recurse('extern')
 	
 	# build program
-	bld.recurse('src')
+	bld.recurse('source')
 
 def get_git_rev():
 	try:
