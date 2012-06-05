@@ -36,8 +36,8 @@ def configure(conf):
 	for header in stdheaders:
 		conf.check_cxx(header_name=header, cxxflags = conf.env.CXXFLAGS)
 	
-	# config libs
-	conf.recurse('lib')
+	# config extern libs
+	conf.recurse('extern')
 	
 	# check used libs
 	for stlibname in conf.env.STLIB:
@@ -55,8 +55,8 @@ def configure(conf):
 	conf.write_config_header('config.h')
 
 def build(bld):
-	# build libs
-	bld.recurse('lib')
+	# build extern libs
+	bld.recurse('extern')
 	
 	# build program
 	bld.recurse('src')
