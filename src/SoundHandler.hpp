@@ -1,30 +1,26 @@
-#ifdef FIXME /// \todo buildsystem for openal
-
 #ifndef SOUNDHANDLER_H
 #define SOUNDHANDLER_H
 
 #include <string>
 
-#include "AL/alc.h"
+#include <AL/alc.h>
 
 #include "Module.hpp"
-#include "Logger.hpp"
+#include "ModulePayload.hpp"
 
 namespace ProjectMaya {
 
 	/**
 	 * Basic sound handler, makes use of your ears.
 	 */
-	class SoundHandler : public Module {
+	class SoundHandler : public ModulePayload {
 		public:
-			explicit SoundHandler(std::shared_ptr<Logger> lg);
+			explicit SoundHandler(std::shared_ptr<Module> lg);
 
-			void init() override;
-			void run() override;
-			void cleanup() override;
+			void operator()() override;
 
 		private:
-			std::shared_ptr<Logger> lg;
+			std::shared_ptr<Module> lg;
 
 			ALCcontext* context;
 			ALCdevice* device;
@@ -38,4 +34,3 @@ namespace ProjectMaya {
 
 #endif
 
-#endif

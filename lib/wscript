@@ -3,6 +3,9 @@
 
 def configure(conf):
 	conf.recurse('glfw')
+	conf.recurse('openal')
 
 def build(bld):
 	bld.recurse('glfw')
+	bld.recurse('openal')
+

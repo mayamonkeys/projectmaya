@@ -3,11 +3,7 @@
 
 #include <memory>
 
-#include "InteractionHandler.hpp"
-#include "Logger.hpp"
 #include "Module.hpp"
-#include "UserInterface.hpp"
-
 
 namespace ProjectMaya {
 
@@ -26,6 +22,7 @@ namespace ProjectMaya {
 		private:
 			std::shared_ptr<Module> mInteractionHandler;
 			std::shared_ptr<Module> mLogger;
+			std::shared_ptr<Module> mSoundHandler;
 			std::shared_ptr<Module> mUserInterface;
 	};
 

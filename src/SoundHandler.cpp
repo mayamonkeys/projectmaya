@@ -1,12 +1,11 @@
-#ifdef FIXME /// \todo buildsystem for openal
-
 #include <sstream>
 #include <stdexcept>
 
-#include "AL/alc.h"
-#include "AL/al.h"
-#include "AL/alext.h"
+#include <AL/alc.h>
+#include <AL/al.h>
+#include <AL/alext.h>
 
+#include "Logger.hpp"
 #include "SoundHandler.hpp"
 
 
@@ -19,23 +18,19 @@ using std::string;
 using std::stringstream;
 
 
-SoundHandler::SoundHandler(shared_ptr<Logger> lg) {
+SoundHandler::SoundHandler(shared_ptr<Module> lg) {
 	this->lg = lg;
 }
 
-void SoundHandler::init() {
+void SoundHandler::operator()() {
 	device = alcOpenDevice(NULL);
 	context = alcCreateContext(device, NULL);
 	alcMakeContextCurrent(context);
 	checkForErrors();
-}
 
-void SoundHandler::run() {
 	printALCInfo();
 	checkForErrors();
-}
 
-void SoundHandler::cleanup() {
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(context);
 	alcCloseDevice(device);
@@ -71,7 +66,7 @@ void SoundHandler::printDevices(ALCenum which, const string& kind) {
 			;
 	}
 
-	lg->log("SoundHandler", stream.str());
+	lg->get<Logger>().log("SoundHandler", stream.str());
 }
 
 void SoundHandler::printALCInfo() {
@@ -88,12 +83,12 @@ void SoundHandler::printALCInfo() {
 		}
 	}	else {
 		stream << "No device enumeration available";
-		lg->log("SoundHandler", stream.str());
+		lg->get<Logger>().log("SoundHandler", stream.str());
 		stream << "";
 	}
 
 	stream << "Default device: " << alcGetString(device, ALC_DEFAULT_DEVICE_SPECIFIER);
-	lg->log("SoundHandler", stream.str());
+	lg->get<Logger>().log("SoundHandler", stream.str());
 	stream << "";
 
 
@@ -102,7 +97,6 @@ void SoundHandler::printALCInfo() {
 	checkForErrors();
 
 	stream << "ALC version: " << (int)major << "." << (int)minor;
-	lg->log("SoundHandler", stream.str());
+	lg->get<Logger>().log("SoundHandler", stream.str());
 }
 
-#endif
