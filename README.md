@@ -1,29 +1,40 @@
 Project Maya
 ============
 
-This is an experimental game, which will combine flavored 2D graphic with social interaction and real world informations.
+Experimental game, combining flavored 2D graphics with social interaction and real world information.
 
 
 Requirements
 ------------
 
-Software:
  * Python 2.4+/3.0+
  * llvm + clang 3.1
  * libc++
 
- 
-Build
------
 
-To build we project, we use a system called waf. First, you have to configure the project:
+Building
+--------
+
+To build we project, use the provided waf buildsystem.
 
 	python waf configure
-
-Fix all reported erros and run the command again (as long as everyting works). Then cross your fingers and build the project:
-
 	python waf build
 
-If waf reported a successful build, you can start the game using the following mystical command:
+You are now able to start the game.
 
 	./build/projectmaya
+
+
+Documentation
+-------------
+
+To get you startet, you should read the first two documents. They are about the toolchain setup and the overall design.
+
+* [Toolchain Preparation](doc/ToolchainPreparation.md) How to build the toolchain, consisting of llvm/clang/libc++/libc++abi
+* [Structural Design](doc/StructuralDesign.md) Overall design decisions
+
+If you want additional information, read the following documents.
+
+* [Developement Tools](doc/DevelopementTools.md) Helper tools for the developement process
+* [Coding Conventions](doc/CodingConventions.md) Conventions for source code developement
+* [Doxygen Documentation](doc/DoxygenDocumentation.md) Building the Doxygen documentation from the sources
