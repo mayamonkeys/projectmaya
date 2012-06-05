@@ -21,6 +21,7 @@ namespace ProjectMaya {
 
 		private:
 			std::shared_ptr<Module> mInteractionHandler;
+			std::shared_ptr<Module> mInterpreter;
 			std::shared_ptr<Module> mLogger;
 			std::shared_ptr<Module> mSoundHandler;
 			std::shared_ptr<Module> mUserInterface;

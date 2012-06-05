@@ -1,10 +1,9 @@
 #include "App.hpp"
 #include "InteractionHandler.hpp"
+#include "Interpreter.hpp"
 #include "Logger.hpp"
 #include "SoundHandler.hpp"
 #include "UserInterface.hpp"
-#include <iostream>
-#include <memory>
 
 using std::shared_ptr;
 
@@ -16,6 +15,7 @@ using namespace ProjectMaya;
 App::App() {
 	// async constructors
 	this->mLogger = shared_ptr<Module>(Module::create<Logger>());
+	this->mInterpreter = shared_ptr<Module>(Module::create<Interpreter>(this->mLogger));
 	this->mInteractionHandler = shared_ptr<Module>(Module::create<InteractionHandler>(this->mLogger));
 	this->mSoundHandler = shared_ptr<Module>(Module::create<SoundHandler>(this->mLogger));
 	this->mUserInterface = shared_ptr<Module>(Module::create<UserInterface>(this->mInteractionHandler, this->mLogger));
@@ -40,6 +40,7 @@ App::~App() {
 void App::waitForShutdown() const {
 	// start
 	this->mLogger->start();
+	this->mInterpreter->start();
 	this->mInteractionHandler->start();
 	this->mSoundHandler->start();
 	this->mUserInterface->start();
@@ -51,17 +52,20 @@ void App::waitForShutdown() const {
 	this->mUserInterface->stop();
 	this->mSoundHandler->stop();
 	this->mInteractionHandler->stop();
+	this->mInterpreter->stop();
 	this->mLogger->stop();
 
 	// wait
 	this->mUserInterface->waitForShutdown();
 	this->mSoundHandler->waitForShutdown();
 	this->mInteractionHandler->waitForShutdown();
+	this->mInterpreter->waitForShutdown();
 	this->mLogger->waitForShutdown();
 
 	// async destroy (destructors will wait later)
 	this->mUserInterface->destroy();
 	this->mSoundHandler->destroy();
 	this->mInteractionHandler->destroy();
+	this->mInterpreter->destroy();
 	this->mLogger->destroy();
 }
