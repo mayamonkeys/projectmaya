@@ -9,7 +9,7 @@ namespace ProjectMaya {
 		public:
 			ModulePayload();
 			virtual ~ModulePayload();
-			virtual void operator()() = 0;
+			virtual void operator()();
 			virtual void shutdown();
 			bool shouldShutdown() const;
 

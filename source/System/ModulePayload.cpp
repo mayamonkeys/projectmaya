@@ -10,6 +10,9 @@ ModulePayload::ModulePayload() : shutdownState(false) {
 ModulePayload::~ModulePayload(){
 }
 
+void ModulePayload::operator()() {
+}
+
 void ModulePayload::shutdown() {
 	this->shutdownState.store(true);
 }
