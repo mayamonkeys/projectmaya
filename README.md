@@ -30,11 +30,11 @@ Documentation
 
 To get you startet, you should read the first two documents. They are about the toolchain setup and the overall design.
 
-* [Toolchain Preparation](doc/ToolchainPreparation.md) How to build the toolchain, consisting of llvm/clang/libc++/libc++abi
-* [Structural Design](doc/StructuralDesign.md) Overall design decisions
+* [Toolchain Preparation](https://github.com/mayamonkeys/projectmaya/blob/master/doc/ToolchainPreparation.md) How to build the toolchain, consisting of llvm/clang/libc++/libc++abi
+* [Structural Design](https://github.com/mayamonkeys/projectmaya/blob/master/doc/StructuralDesign.md) Overall design decisions
 
 If you want additional information, read the following documents.
 
-* [Developement Tools](doc/DevelopementTools.md) Helper tools for the developement process
-* [Coding Conventions](doc/CodingConventions.md) Conventions for source code developement
-* [Doxygen Documentation](doc/DoxygenDocumentation.md) Building the Doxygen documentation from the sources
+* [Developement Tools](https://github.com/mayamonkeys/projectmaya/blob/master/doc/DevelopementTools.md) Helper tools for the developement process
+* [Coding Conventions](https://github.com/mayamonkeys/projectmaya/blob/master/doc/CodingConventions.md) Conventions for source code developement
+* [Doxygen Documentation](https://github.com/mayamonkeys/projectmaya/blob/master/doc/DoxygenDocumentation.md) Building the Doxygen documentation from the sources
