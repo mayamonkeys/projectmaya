@@ -22,6 +22,9 @@ def configure(conf):
 		conf.env.LUA_MAKETARGET = 'mingw'
 	else:
 		conf.fatal('cannot find target platform for glfw')
+	
+	# add lib to env
+	conf.env.append_unique('INCLUDES', path + '/src')
 
 def build(bld):
 	# make (force run)
