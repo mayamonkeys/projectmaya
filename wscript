@@ -40,10 +40,16 @@ def configure(conf):
 	conf.recurse('extern')
 	
 	# check used libs
-	for stlibname in conf.env.STLIB:
+	stlibs = conf.env.STLIB
+	libs = conf.env.LIB
+	conf.env.STLIB = []
+	conf.env.LIB = []
+	for stlibname in stlibs:
 		conf.check_cxx(stlib=stlibname, cxxflags = conf.env.CXXFLAGS)
-	for libname in conf.env.LIB:
+	for libname in libs:
 		conf.check_cxx(lib=libname, cxxflags = conf.env.CXXFLAGS)
+	conf.env.append_unique('STLIB', stlibs)
+	conf.env.append_unique('LIB', libs)
 	
 	# get build informations
 	conf.define('REVISION', get_git_rev())
