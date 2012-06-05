@@ -82,7 +82,7 @@ echo:
 	@echo "RM= $(RM)"
 
 # Convenience targets for popular platforms
-ALL= all
+ALL= a
 
 none:
 	@echo "Please do 'make PLATFORM' where PLATFORM is one of these:"

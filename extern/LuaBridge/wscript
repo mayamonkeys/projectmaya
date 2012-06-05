@@ -1,0 +1,14 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import sys
+
+def configure(conf):
+	path = conf.path.abspath()
+	
+	# add lib to env
+	conf.env.append_unique('INCLUDES', path)
+
+def build(bld):
+	pass
+	

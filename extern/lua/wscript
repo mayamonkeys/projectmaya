@@ -1,0 +1,34 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import sys
+
+def configure(conf):
+	path = conf.path.abspath()
+	
+	# get Makefile/lib path
+	conf.env.LUA_MAKEPATH = path
+	conf.env.LUA_LIBPATH = path + '/src'
+	
+	# detect platform
+	if sys.platform.startswith('cygwin'):
+		conf.env.LUA_MAKETARGET = 'mingw'
+	elif sys.platform.startswith('darwin'):
+		conf.env.LUA_MAKETARGET = 'maxosx'
+	elif sys.platform.startswith('linux'):
+		conf.env.LUA_MAKETARGET = 'linux'
+		conf.env.append_unique('LIB', ['dl'])
+	elif sys.platform.startswith('win32'):
+		conf.env.LUA_MAKETARGET = 'mingw'
+	else:
+		conf.fatal('cannot find target platform for glfw')
+
+def build(bld):
+	# make (force run)
+	taskgen_make = bld(rule='make --directory=' + bld.env.LUA_MAKEPATH + ' ' + bld.env.LUA_MAKETARGET, name='lua_make', always=True)
+	taskgen_make.post()
+	task_make = taskgen_make.tasks[0]
+	task_make.run()
+	
+	bld.read_stlib('lua', paths = [bld.env.LUA_LIBPATH])
+	
