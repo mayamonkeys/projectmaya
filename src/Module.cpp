@@ -29,7 +29,12 @@ Module::Module(Module&& obj) {
 	lock_guard<recursive_mutex> memberGuard(obj.memberMutex);
 
 	// create dummy modul
+	this->helper = shared_ptr<THelper>(new THelper);
+	this->helper->dummy = true;
 	this->startThread();
+
+	// synchronize payload pointer to avoid crash of get
+	this->helper->payload = obj.helper->payload;
 
 	// swap
 	std::swap(this->helper, obj.helper);
@@ -134,20 +139,25 @@ bool Module::wasStarted() const {
 }
 
 void Module::threadFunc(shared_ptr<THelper> helper) {
-	helper->payload = helper->creator();
+	if (!helper->dummy) {
+		helper->payload = helper->creator();
+	}
 	helper->readyInit.unlock();
 
 	lock_guard<mutex> runGuard(helper->phaseRun);
-	if (!helper->shutdown.load()) {
+	if (!helper->shutdown.load() && !helper->dummy) {
 		(*helper->payload)();
 	}
 	helper->readyRun.unlock();
 
 	lock_guard<mutex> cleanupGuard(helper->phaseCleanup);
-	delete helper->payload;
+	if (!helper->dummy) {
+		delete helper->payload;
+	}
 }
 
 void Module::startThread() {
+	// prepare helper
 	this->helper->phaseRun.lock();
 	this->helper->phaseCleanup.lock();
 	this->helper->readyInit.lock();

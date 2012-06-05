@@ -62,6 +62,7 @@ namespace ProjectMaya {
 				std::atomic<bool> started;
 				std::atomic<bool> shutdown;
 				std::atomic<bool> destroyed;
+				bool dummy = false;
 			};
 
 			std::recursive_mutex memberMutex;
