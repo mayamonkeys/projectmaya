@@ -1,28 +1,32 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
+import re
 import sys
+from waflib.TaskGen import feature
+
+@feature('cmake')
+def cmake_config(self):
+	srcpath = self.srcpath
+	bldpath = self.bldpath
+	self.bld(rule='mkdir -p ' + bldpath + ' && cd ' + bldpath + ' && cmake -DLIBTYPE=STATIC -DDLOPEN=OFF ' + srcpath)
+	self.source= []
 
 def configure(conf):
 	path = conf.path.abspath()
 	
-	# get Makefile path
-	conf.env.OPENAL_MAKEPATH = path
+	# execute cmake
+	bldpath = conf.path.find_node('/').get_bld().abspath()
+	conf.check_cxx(features='cmake', msg='config openal', srcpath=path, bldpath=bldpath)
 	
-	# detect platform
-	if sys.platform.startswith('cygwin'):
-		conf.env.append_unique('STLIB', ['winm'])
-	elif sys.platform.startswith('darwin'):
-		#???
-		#conf.env.append_unique('FRAMEWORK', ['Cocoa', 'OpenGL'])
-		pass
-	elif sys.platform.startswith('linux'):
-		conf.env.append_unique('LIB', ['asound'])
-		conf.env.append_unique('LINKFLAGS', ['-pthread'])
-	elif sys.platform.startswith('win32'):
-		conf.env.append_unique('STLIB', ['winm'])
-	else:
-		conf.fatal('cannot find target platform for asound')
+	# read openal config
+	cmake_cache_file = open(bldpath + '/CMakeCache.txt', 'r')
+	cmake_cache = cmake_cache_file.read()
+	cmake_cache_file.close()
+	cmake_cache_libs = re.search(r'''openal_LIB_DEPENDS:STATIC=.*''', cmake_cache).group(0)
+	for part in re.findall(r'''(general;\w*;)''', cmake_cache):
+		lib = re.search(r'''general;(\w*);''', part).group(1)
+		conf.env.append_unique('LIB', [lib])
 	
 	# add lib to env
 	conf.env.append_unique('INCLUDES', path + '/include')
@@ -30,12 +34,7 @@ def configure(conf):
 def build(bld):
 	path = bld.path.find_node('/').get_bld().abspath()
 	
-	# cmake (force run)
-	taskgen_cmake = bld(rule='mkdir -p ' + path + ' && cd ' + path + ' && cmake -DLIBTYPE=STATIC -DDLOPEN=OFF -DPORTAUDIO=OFF -DOSS=FALSE ' + bld.env.OPENAL_MAKEPATH, name='openal_cmake', always=True)
-	taskgen_cmake.post()
-	task_cmake = taskgen_cmake.tasks[0]
-	task_cmake.run()
-	
+	# make (force run)
 	taskgen_make = bld(rule='make --directory=' + path, name='openal_make', always=True)
 	taskgen_make.post()
 	task_make = taskgen_make.tasks[0]
