@@ -29,7 +29,7 @@ void Logger::operator()() {
 	milliseconds stime(20);
 	shared_ptr<MessageSlot> defaultSlot = this->getMessageDriver()->getSlot("defaultLog");
 
-	while(!this->shouldShutdown()) {
+	while(!this->shouldShutdown() || defaultSlot->hasMessages()) {
 		while(defaultSlot->hasMessages()) {
 			shared_ptr<Message> m = defaultSlot->get();
 			string msg("unkown message");
