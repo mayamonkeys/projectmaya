@@ -16,8 +16,7 @@ using std::mutex;
 using std::shared_ptr;
 using std::this_thread::sleep_for;
 
-InteractionHandler::InteractionHandler(shared_ptr<Module> lg) {
-	this->lg = lg;
+InteractionHandler::InteractionHandler() {
 }
 
 void InteractionHandler::operator()() {

@@ -5,7 +5,6 @@
 
 #include <lua.hpp>
 
-#include "System/Module.hpp"
 #include "System/ModulePayload.hpp"
 
 
@@ -16,15 +15,13 @@ namespace ProjectMaya {
 	 */
 	class Interpreter : public ModulePayload {
 		public:
-			explicit Interpreter(std::shared_ptr<Module> lg);
+			explicit Interpreter();
 			~Interpreter();
 
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
 		private:
-			std::shared_ptr<Module> lg;
-
 			lua_State* luaState = NULL;
 
 			/// Exposes specific functionality to the environment.

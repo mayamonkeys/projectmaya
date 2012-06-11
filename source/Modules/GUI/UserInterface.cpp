@@ -29,9 +29,7 @@ void keyCallbackC(int id, int state) {
 	keyCallbackFunc(id, state);
 }
 
-UserInterface::UserInterface(shared_ptr<Module> ih, shared_ptr<Module> lg) {
-	this->ih = ih;
-	this->lg = lg;
+UserInterface::UserInterface() {
 }
 
 UserInterface::~UserInterface() {

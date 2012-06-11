@@ -16,8 +16,7 @@ using std::runtime_error;
 using std::shared_ptr;
 
 
-Interpreter::Interpreter(shared_ptr<Module> lg) {
-	this->lg = lg;
+Interpreter::Interpreter() {
 }
 
 void Interpreter::operator()() {

@@ -18,8 +18,7 @@ using std::string;
 using std::stringstream;
 
 
-SoundHandler::SoundHandler(shared_ptr<Module> lg) {
-	this->lg = lg;
+SoundHandler::SoundHandler() {
 }
 
 void SoundHandler::operator()() {

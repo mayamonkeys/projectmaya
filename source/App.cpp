@@ -15,10 +15,10 @@ using namespace ProjectMaya;
 App::App() {
 	// async constructors
 	this->mLogger = shared_ptr<Module>(Module::create<Logger>());
-	this->mInterpreter = shared_ptr<Module>(Module::create<Interpreter>(this->mLogger));
-	this->mInteractionHandler = shared_ptr<Module>(Module::create<InteractionHandler>(this->mLogger));
-	this->mSoundHandler = shared_ptr<Module>(Module::create<SoundHandler>(this->mLogger));
-	this->mUserInterface = shared_ptr<Module>(Module::create<UserInterface>(this->mInteractionHandler, this->mLogger));
+	this->mInterpreter = shared_ptr<Module>(Module::create<Interpreter>());
+	this->mInteractionHandler = shared_ptr<Module>(Module::create<InteractionHandler>());
+	this->mSoundHandler = shared_ptr<Module>(Module::create<SoundHandler>());
+	this->mUserInterface = shared_ptr<Module>(Module::create<UserInterface>());
 
 	// wait
 	this->mLogger->waitForConstructor();

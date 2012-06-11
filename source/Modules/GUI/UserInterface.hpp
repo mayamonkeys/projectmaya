@@ -3,8 +3,6 @@
 
 #include <memory>
 
-#include "Modules/Interaction/InteractionHandler.hpp"
-#include "System/Module.hpp"
 #include "System/ModulePayload.hpp"
 
 
@@ -15,15 +13,12 @@ namespace ProjectMaya {
 	 */
 	class UserInterface : public ModulePayload {
 		public:
-			UserInterface(std::shared_ptr<Module> ih, std::shared_ptr<Module> lg);
+			UserInterface();
 			~UserInterface();
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime);
 
 		private:
-			std::shared_ptr<Module> ih;
-			std::shared_ptr<Module> lg;
-
 			void initGLFW();
 			void initOpenGL() const;
 			void render();

@@ -5,7 +5,6 @@
 
 #include <AL/alc.h>
 
-#include "System/Module.hpp"
 #include "System/ModulePayload.hpp"
 
 namespace ProjectMaya {
@@ -15,14 +14,12 @@ namespace ProjectMaya {
 	 */
 	class SoundHandler : public ModulePayload {
 		public:
-			explicit SoundHandler(std::shared_ptr<Module> lg);
+			explicit SoundHandler();
 
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
 		private:
-			std::shared_ptr<Module> lg;
-
 			ALCcontext* context;
 			ALCdevice* device;
 
