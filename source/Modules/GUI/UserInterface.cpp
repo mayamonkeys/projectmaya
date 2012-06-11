@@ -6,6 +6,8 @@
 
 #include <config.h>
 
+#include "CodeTables/UserEventsTable.hpp"
+#include "MessageTypes/IntMessage.hpp"
 #include "MessageTypes/StringMessage.hpp"
 #include "UserInterface.hpp"
 #include "DummyModels.hpp"
@@ -46,7 +48,9 @@ void UserInterface::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, 
 	ModulePayload::setupMessageDriver(messageDriver, firstTime);
 
 	if (firstTime) {
+		this->getMessageDriver()->createSlot("keyEvents");
 		this->getMessageDriver()->createSlot("log");
+		this->getMessageDriver()->createSlot("user");
 	}
 }
 
@@ -84,12 +88,32 @@ void UserInterface::initOpenGL() const {
 }
 
 /* main render loop */
-void UserInterface::render() const {
+void UserInterface::render() {
 	double oldTime = glfwGetTime();
 	double currentTime;
 	double deltaRotate = 0.0;
+	shared_ptr<MessageSlot> userSlot(this->getMessageDriver()->getSlot("user"));
 
-	while(glfwGetWindowParam(GLFW_OPENED) && !this->ih->get<InteractionHandler>().exitRequested() && !this->shouldShutdown()) {
+	while(glfwGetWindowParam(GLFW_OPENED) && !this->shouldShutdown()) {
+		// handle events
+		while (userSlot->hasMessages()) {
+			shared_ptr<Message> m = userSlot->get();
+
+			// check type
+			if (m->isType("int")) {
+				IntMessage* m2 = dynamic_cast<IntMessage*>(m.get());
+
+				// security check
+				if (m2 != nullptr) {
+					int code = m2->getData();
+
+					if (code == UserEventTable::EXIT) {
+						return;
+					}
+				}
+			}
+		}
+
 		currentTime = glfwGetTime();
 		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
 		oldTime = currentTime;
@@ -152,11 +176,11 @@ void UserInterface::renderScene() const {
 }
 
 void UserInterface::keyCallback(int id, int state) {
-	if (state == GL_TRUE) {
-		this->ih->get<InteractionHandler>().newKeyEvent(true, id);
-	} else {
-		this->ih->get<InteractionHandler>().newKeyEvent(false, id);
+	int code = id;
+	if (state == GL_FALSE) {
+		code *= -1;
 	}
+	this->getMessageDriver()->getSlot("keyEvents")->emit(IntMessage(code));
 }
 
 void UserInterface::queryVideoModes() {

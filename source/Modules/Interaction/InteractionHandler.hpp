@@ -15,21 +15,10 @@ namespace ProjectMaya {
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
-			void newKeyEvent(bool pressed, int keyCode);
-
-			bool exitRequested();
-
 		private:
-			struct KeyEvent {
-				bool pressed;
-				int keyCode;
-			};
-
 			std::shared_ptr<Module> lg;
 
 			std::mutex memberMutex;
-			std::queue<KeyEvent> keyQueue;
-			bool exit = false;
 	};
 
 }

@@ -3,6 +3,8 @@
 #include <thread>
 #include <GL/glfw.h>
 
+#include "CodeTables/UserEventsTable.hpp"
+#include "MessageTypes/IntMessage.hpp"
 #include "MessageTypes/StringMessage.hpp"
 #include "InteractionHandler.hpp"
 
@@ -20,35 +22,33 @@ InteractionHandler::InteractionHandler(shared_ptr<Module> lg) {
 
 void InteractionHandler::operator()() {
 	milliseconds stime(20);
+	shared_ptr<MessageSlot> keySlot = this->getMessageDriver()->getSlot("keys");
 
 	while(!this->shouldShutdown()) {
-		// get queue status
-		bool empty;
-		{
-			lock_guard<mutex> memberGuard(this->memberMutex);
-			empty = this->keyQueue.empty();
-		}
+		while(keySlot->hasMessages()) {
+			shared_ptr<Message> m(keySlot->get());
 
-		while(!empty) {
-			// get event
-			KeyEvent event;
-			{
-				lock_guard<mutex> memberGuard(this->memberMutex);
-				event = this->keyQueue.front();
-				this->keyQueue.pop();
-			}
+			// check type
+			if (m->isType("int")) {
+				IntMessage* m2 = dynamic_cast<IntMessage*>(m.get());
 
-			/// \todo do something with the information
-			this->getMessageDriver()->getSlot("log")->emit(StringMessage("key pressed"));
+				// security check
+				if (m2 != nullptr) {
+					int keyCode = m2->getData();
+					bool pressed = true;
 
-			if (event.keyCode == GLFW_KEY_ESC) {
-				this->exit = true;
-			}
+					// not pressed?
+					if (keyCode < 0) {
+						pressed = false;
+						keyCode *= -1;
+					}
 
-			// get new queue status
-			{
-				lock_guard<mutex> memberGuard(this->memberMutex);
-				empty = this->keyQueue.empty();
+					this->getMessageDriver()->getSlot("log")->emit(StringMessage("key pressed"));
+
+					if (keyCode == GLFW_KEY_ESC) {
+						this->getMessageDriver()->getSlot("userEvents")->emit(IntMessage(UserEventTable::EXIT));
+					}
+				}
 			}
 		}
 
@@ -60,23 +60,9 @@ void InteractionHandler::setupMessageDriver(shared_ptr<MessageDriver> messageDri
 	ModulePayload::setupMessageDriver(messageDriver, firstTime);
 
 	if (firstTime) {
+		this->getMessageDriver()->createSlot("keys");
 		this->getMessageDriver()->createSlot("log");
+		this->getMessageDriver()->createSlot("userEvents");
 	}
 }
 
-void InteractionHandler::newKeyEvent(bool pressed, int keyCode) {
-	lock_guard<mutex> memberGuard(this->memberMutex);
-
-	// create event
-	KeyEvent event;
-	event.pressed = pressed;
-	event.keyCode = keyCode;
-
-	// add event to queue
-	this->keyQueue.push(event);
-}
-
-bool InteractionHandler::exitRequested() {
-	lock_guard<mutex> memberGuard(this->memberMutex);
-	return this->exit;
-}

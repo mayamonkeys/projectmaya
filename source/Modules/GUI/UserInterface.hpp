@@ -26,7 +26,7 @@ namespace ProjectMaya {
 
 			void initGLFW();
 			void initOpenGL() const;
-			void render() const;
+			void render();
 
 			void renderOpenGL(const double&) const;
 			void renderScene() const;

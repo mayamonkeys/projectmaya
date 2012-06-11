@@ -32,6 +32,10 @@ App::App() {
 	this->mInteractionHandler->getMessageSlot("log").addTarget(logTarget);
 	this->mSoundHandler->getMessageSlot("log").addTarget(logTarget);
 	this->mUserInterface->getMessageSlot("log").addTarget(logTarget);
+
+	this->mUserInterface->getMessageSlot("keyEvents").addTarget(this->mInteractionHandler->getMessageSlot("keys"));
+
+	this->mInteractionHandler->getMessageSlot("userEvents").addTarget(this->mUserInterface->getMessageSlot("user"));
 }
 
 /**
