@@ -55,7 +55,7 @@ void Logger::operator()() {
 
 			// formatting: timestamp and message
 			auto now = system_clock::to_time_t(system_clock::now());
-			clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
+			clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "] " << m->getSource().getGlobalName() << ": " << msg << endl;
 		}
 
 		sleep_for(stime);
