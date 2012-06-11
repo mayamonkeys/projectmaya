@@ -9,7 +9,7 @@ from waflib.TaskGen import feature
 def cmake_config(self):
 	srcpath = self.srcpath
 	bldpath = self.bldpath
-	self.bld(rule='mkdir -p ' + bldpath + ' && cd ' + bldpath + ' && cmake -DLIBTYPE=STATIC -DDLOPEN=OFF ' + srcpath)
+	self.bld(rule='mkdir -p ' + bldpath + ' && cd ' + bldpath + ' && cmake -DLIBTYPE=STATIC -DDLOPEN=OFF -DOSS=OFF ' + srcpath)
 	self.source= []
 
 def configure(conf):
