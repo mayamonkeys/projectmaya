@@ -27,7 +27,7 @@ void MessageSlot::addTarget(MessagePublicSlot target) {
 	this->targets.push_front(target);
 }
 
-void MessageSlot::drop(Message message) {
+void MessageSlot::drop(shared_ptr<Message> message) {
 	lock_guard<mutex> queueGuard(this->queueMutex);
 	this->messages.push(message);
 }
@@ -37,20 +37,10 @@ bool MessageSlot::hasMessages() {
 	return !this->messages.empty();
 }
 
-Message MessageSlot::get() {
+shared_ptr<Message> MessageSlot::get() {
 	lock_guard<mutex> queueGuard(this->queueMutex);
-	Message m = this->messages.front();
+	shared_ptr<Message> m = this->messages.front();
 	this->messages.pop();
 	return m;
 }
-
-void MessageSlot::emit(Message message) {
-	lock_guard<mutex> targetsGuard(this->targetsMutex);
-	for (auto target : this->targets) {
-		Message m(message);
-		m.setSource(this->getPublicSlot());
-		target.drop(m);
-	}
-}
-
 

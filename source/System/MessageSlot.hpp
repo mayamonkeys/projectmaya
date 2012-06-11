@@ -18,10 +18,19 @@ namespace ProjectMaya {
 
 			MessagePublicSlot getPublicSlot();
 			void addTarget(MessagePublicSlot target);
-			void drop(Message message);
+			void drop(std::shared_ptr<Message> message);
 			bool hasMessages();
-			Message get();
-			void emit(Message message);
+			std::shared_ptr<Message> get();
+
+			template <class TMessage>
+			void emit(TMessage message) {
+				std::lock_guard<std::mutex> targetsGuard(this->targetsMutex);
+				for (auto target : this->targets) {
+					std::shared_ptr<TMessage> m(new TMessage(message));
+					m->setSource(this->getPublicSlot());
+					target.drop(m);
+				}
+			};
 
 		private:
 			std::mutex targetsMutex;
@@ -30,7 +39,7 @@ namespace ProjectMaya {
 			std::string id;
 			std::shared_ptr<MessagePublicSlot::Alive> alive;
 			std::forward_list<MessagePublicSlot> targets;
-			std::queue<Message> messages;
+			std::queue<std::shared_ptr<Message>> messages;
 	};
 
 }

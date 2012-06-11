@@ -18,6 +18,7 @@ namespace ProjectMaya {
 			explicit SoundHandler(std::shared_ptr<Module> lg);
 
 			void operator()() override;
+			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
 		private:
 			std::shared_ptr<Module> lg;

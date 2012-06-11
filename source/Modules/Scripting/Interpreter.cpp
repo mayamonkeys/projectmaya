@@ -5,8 +5,8 @@
 #include <lua.hpp>
 #include <LuaBridge.h>
 
+#include "MessageTypes/StringMessage.hpp"
 #include "Interpreter.hpp"
-#include "Modules/Log/Logger.hpp"
 
 
 using namespace ProjectMaya;
@@ -21,7 +21,7 @@ Interpreter::Interpreter(shared_ptr<Module> lg) {
 }
 
 void Interpreter::operator()() {
-	lg->get<Logger>().log("Interpreter", "Initializing the Lua engine");
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Initializing the Lua engine"));
 
 	luaState = luaL_newstate();
 
@@ -33,10 +33,18 @@ void Interpreter::operator()() {
 
 	exposeToState(luaState);
 
-	lg->get<Logger>().log("Interpreter", "Lua engine successfully initialized");
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Lua engine successfully initialized"));
 
 	// do the test call
 	luaL_dostring(luaState, "Interpreter:reportSuccess()");
+}
+
+void Interpreter::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bool firstTime) {
+	ModulePayload::setupMessageDriver(messageDriver, firstTime);
+
+	if (firstTime) {
+		this->getMessageDriver()->createSlot("log");
+	}
 }
 
 Interpreter::~Interpreter() {
@@ -55,6 +63,6 @@ void Interpreter::exposeToState(lua_State* luaState) {
 	lua_setglobal(luaState, "Interpreter");
 }
 
-void Interpreter::reportSuccess() const {
-	lg->get<Logger>().log("Interpreter", "Successfully called method from Lua");
+void Interpreter::reportSuccess() {
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Successfully called method from Lua"));
 }

@@ -25,6 +25,13 @@ App::App() {
 	this->mInteractionHandler->waitForConstructor();
 	this->mSoundHandler->waitForConstructor();
 	this->mUserInterface->waitForConstructor();
+
+	// link modules
+	MessagePublicSlot logTarget(this->mLogger->getMessageSlot("defaultLog"));
+	this->mInterpreter->getMessageSlot("log").addTarget(logTarget);
+	this->mInteractionHandler->getMessageSlot("log").addTarget(logTarget);
+	this->mSoundHandler->getMessageSlot("log").addTarget(logTarget);
+	this->mUserInterface->getMessageSlot("log").addTarget(logTarget);
 }
 
 /**

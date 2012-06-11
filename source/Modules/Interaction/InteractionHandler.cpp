@@ -3,6 +3,7 @@
 #include <thread>
 #include <GL/glfw.h>
 
+#include "MessageTypes/StringMessage.hpp"
 #include "InteractionHandler.hpp"
 
 using namespace ProjectMaya;
@@ -38,7 +39,7 @@ void InteractionHandler::operator()() {
 			}
 
 			/// \todo do something with the information
-			lg->get<Logger>().log("InteractionHandler", "key pressed");
+			this->getMessageDriver()->getSlot("log")->emit(StringMessage("key pressed"));
 
 			if (event.keyCode == GLFW_KEY_ESC) {
 				this->exit = true;
@@ -52,6 +53,14 @@ void InteractionHandler::operator()() {
 		}
 
 		sleep_for(stime);
+	}
+}
+
+void InteractionHandler::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bool firstTime) {
+	ModulePayload::setupMessageDriver(messageDriver, firstTime);
+
+	if (firstTime) {
+		this->getMessageDriver()->createSlot("log");
 	}
 }
 

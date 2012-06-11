@@ -6,6 +6,7 @@
 #include <thread>
 
 #include "Logger.hpp"
+#include "MessageTypes/StringMessage.hpp"
 
 using namespace ProjectMaya;
 
@@ -20,36 +21,28 @@ using std::lock_guard;
 using std::mutex;
 using std::noskipws;
 using std::put_time;
+using std::shared_ptr;
 using std::this_thread::sleep_for;
 
 void Logger::operator()() {
 	milliseconds stime(20);
+	shared_ptr<MessageSlot> defaultSlot = this->getMessageDriver()->getSlot("defaultLog");
 
 	while(!this->shouldShutdown()) {
-		// get queue status
-		bool empty;
-		{
-			lock_guard<mutex> memberGuard(this->memberMutex);
-			empty = this->msgQueue.empty();
-		}
+		while(defaultSlot->hasMessages()) {
+			shared_ptr<Message> m = defaultSlot->get();
 
-		while(!empty) {
-			string msg;
-			// get msg
-			{
-				lock_guard<mutex> memberGuard(this->memberMutex);
-				msg = this->msgQueue.front();
-				this->msgQueue.pop();
-			}
+			// check type
+			if (m->isType("string")) {
+				StringMessage* m2 = dynamic_cast<StringMessage*>(m.get());
 
-			// formatting: timestamp and message
-			auto now = system_clock::to_time_t(system_clock::now());
-			clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
-
-			// get new queue status
-			{
-				lock_guard<mutex> memberGuard(this->memberMutex);
-				empty = this->msgQueue.empty();
+				// security check (fails if cast was not successful)
+				if (m2 != nullptr) {
+					string msg = m2->getData();
+					// formatting: timestamp and message
+					auto now = system_clock::to_time_t(system_clock::now());
+					clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
+				}
 			}
 		}
 
@@ -57,29 +50,11 @@ void Logger::operator()() {
 	}
 }
 
-void Logger::log(const string& msg) {
-	lock_guard<mutex> memberGuard(this->memberMutex);
+void Logger::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bool firstTime) {
+	ModulePayload::setupMessageDriver(messageDriver, firstTime);
 
-	stringstream stream;
-	stream << noskipws << "[*]: " << msg;
-
-	this->msgQueue.push(stream.str());
+	if (firstTime) {
+		this->getMessageDriver()->createSlot("defaultLog");
+	}
 }
 
-void Logger::log(const int& id, const string& msg) {
-	lock_guard<mutex> memberGuard(this->memberMutex);
-
-	stringstream stream;
-	stream << noskipws << "[" << id << "]: " << msg;
-
-	this->msgQueue.push(stream.str());
-}
-
-void Logger::log(const string& name, const string& msg) {
-	lock_guard<mutex> memberGuard(this->memberMutex);
-
-	stringstream stream;
-	stream << noskipws << "[" << name << "]" << ": " << msg;
-
-	this->msgQueue.push(stream.str());
-}

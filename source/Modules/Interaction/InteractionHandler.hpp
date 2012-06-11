@@ -4,7 +4,6 @@
 #include <mutex>
 #include <queue>
 
-#include "Modules/Log/Logger.hpp"
 #include "System/Module.hpp"
 #include "System/ModulePayload.hpp"
 
@@ -14,6 +13,7 @@ namespace ProjectMaya {
 		public:
 			InteractionHandler(std::shared_ptr<Module> lg);
 			void operator()() override;
+			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
 			void newKeyEvent(bool pressed, int keyCode);
 

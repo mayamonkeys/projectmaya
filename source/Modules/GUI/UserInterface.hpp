@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "Modules/Interaction/InteractionHandler.hpp"
-#include "Modules/Log/Logger.hpp"
 #include "System/Module.hpp"
 #include "System/ModulePayload.hpp"
 
@@ -19,6 +18,7 @@ namespace ProjectMaya {
 			UserInterface(std::shared_ptr<Module> ih, std::shared_ptr<Module> lg);
 			~UserInterface();
 			void operator()() override;
+			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime);
 
 		private:
 			std::shared_ptr<Module> ih;
@@ -33,7 +33,7 @@ namespace ProjectMaya {
 
 			void keyCallback(int id, int state);
 
-			void queryVideoModes() const;
+			void queryVideoModes();
 	};
 
 }

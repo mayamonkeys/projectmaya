@@ -25,7 +25,7 @@ void MessagePublicSlot::addTarget(MessagePublicSlot target) {
 	}
 }
 
-void MessagePublicSlot::drop(Message message) {
+void MessagePublicSlot::drop(shared_ptr<Message> message) {
 	lock_guard<mutex> aliveGuard(this->alive->stateMutex);
 	if (this->alive->state) {
 		this->slot->drop(message);

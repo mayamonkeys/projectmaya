@@ -6,6 +6,7 @@
 
 #include <config.h>
 
+#include "MessageTypes/StringMessage.hpp"
 #include "UserInterface.hpp"
 #include "DummyModels.hpp"
 
@@ -39,6 +40,14 @@ void UserInterface::operator()() {
 	initGLFW();
 	initOpenGL();
 	render();
+}
+
+void UserInterface::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bool firstTime) {
+	ModulePayload::setupMessageDriver(messageDriver, firstTime);
+
+	if (firstTime) {
+		this->getMessageDriver()->createSlot("log");
+	}
 }
 
 void UserInterface::initGLFW() {
@@ -150,7 +159,7 @@ void UserInterface::keyCallback(int id, int state) {
 	}
 }
 
-void UserInterface::queryVideoModes() const {
+void UserInterface::queryVideoModes() {
 	GLFWvidmode list[200];
 	int nummodes = glfwGetVideoModes(list, 200);
 
@@ -161,5 +170,5 @@ void UserInterface::queryVideoModes() const {
 	for(int i = 0; i < nummodes; ++i)
 		 stream << list[i].Width << "x" << list[i].Height << " ";
 
-	this->lg->get<Logger>().log("UserInterface", stream.str());
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
 }

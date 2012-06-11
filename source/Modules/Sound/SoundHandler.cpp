@@ -5,7 +5,7 @@
 #include <AL/al.h>
 #include <AL/alext.h>
 
-#include "Modules/Log/Logger.hpp"
+#include "MessageTypes/StringMessage.hpp"
 #include "SoundHandler.hpp"
 
 
@@ -34,6 +34,14 @@ void SoundHandler::operator()() {
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(context);
 	alcCloseDevice(device);
+}
+
+void SoundHandler::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bool firstTime) {
+	ModulePayload::setupMessageDriver(messageDriver, firstTime);
+
+	if (firstTime) {
+		this->getMessageDriver()->createSlot("log");
+	}
 }
 
 void SoundHandler::checkForErrors() {
@@ -66,7 +74,7 @@ void SoundHandler::printDevices(ALCenum which, const string& kind) {
 			;
 	}
 
-	lg->get<Logger>().log("SoundHandler", stream.str());
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
 }
 
 void SoundHandler::printALCInfo() {
@@ -83,12 +91,12 @@ void SoundHandler::printALCInfo() {
 		}
 	}	else {
 		stream << "No device enumeration available";
-		lg->get<Logger>().log("SoundHandler", stream.str());
+		this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
 		stream << "";
 	}
 
 	stream << "Default device: " << alcGetString(device, ALC_DEFAULT_DEVICE_SPECIFIER);
-	lg->get<Logger>().log("SoundHandler", stream.str());
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
 	stream << "";
 
 
@@ -97,6 +105,6 @@ void SoundHandler::printALCInfo() {
 	checkForErrors();
 
 	stream << "ALC version: " << (int)major << "." << (int)minor;
-	lg->get<Logger>().log("SoundHandler", stream.str());
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
 }
 

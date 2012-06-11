@@ -20,6 +20,7 @@ namespace ProjectMaya {
 			~Interpreter();
 
 			void operator()() override;
+			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 
 		private:
 			std::shared_ptr<Module> lg;
@@ -30,7 +31,7 @@ namespace ProjectMaya {
 			void exposeToState(lua_State* luaState);
 
 			// dummy function, to test the interpreter
-			void reportSuccess() const ;
+			void reportSuccess();
 	};
 
 }
