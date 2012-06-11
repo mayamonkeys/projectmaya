@@ -32,7 +32,7 @@ def configure(conf):
 	conf.env.append_unique('CXXFLAGS', conf.env.CXXFLAGS_DEFAULT)
 	
 	# check stdlib headers
-	stdheaders = ['atomic', 'chrono', 'functional', 'iostream', 'memory', 'mutex', 'queue', 'sstream', 'stdexcept', 'string', 'thread']
+	stdheaders = ['atomic', 'chrono', 'forward_list', 'functional', 'iostream', 'memory', 'mutex', 'queue', 'sstream', 'stdexcept', 'string', 'thread', 'unordered_map', 'utility']
 	for header in stdheaders:
 		conf.check_cxx(header_name=header, cxxflags = conf.env.CXXFLAGS)
 	
