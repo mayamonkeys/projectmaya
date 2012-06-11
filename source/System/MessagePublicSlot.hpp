@@ -23,6 +23,8 @@ namespace ProjectMaya {
 			bool isAlive();
 			void addTarget(MessagePublicSlot target);
 			void drop(std::shared_ptr<Message> message);
+			std::string getId();
+			std::string getGlobalName();
 
 		private:
 			MessageSlot* slot;

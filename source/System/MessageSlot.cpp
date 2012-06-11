@@ -1,11 +1,16 @@
 #include "MessageSlot.hpp"
 
+#include <functional>
+#include <sstream>
+
 using namespace ProjectMaya;
 
+using std::hash;
 using std::lock_guard;
 using std::mutex;
 using std::shared_ptr;
 using std::string;
+using std::stringstream;
 
 MessageSlot::MessageSlot(string id) {
 	this->id = id;
@@ -42,5 +47,16 @@ shared_ptr<Message> MessageSlot::get() {
 	shared_ptr<Message> m = this->messages.front();
 	this->messages.pop();
 	return m;
+}
+
+string MessageSlot::getId() {
+	return this->id;
+}
+
+string MessageSlot::getGlobalName() {
+	hash<void*> hashFunc;
+	stringstream stream;
+	stream << hashFunc(this) << "|" << this->id;
+	return stream.str();
 }
 

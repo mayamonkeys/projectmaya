@@ -32,3 +32,19 @@ void MessagePublicSlot::drop(shared_ptr<Message> message) {
 	}
 }
 
+string MessagePublicSlot::getId() {
+	lock_guard<mutex> aliveGuard(this->alive->stateMutex);
+	if (this->alive->state) {
+		return this->slot->getId();
+	}
+	return "";
+}
+
+string MessagePublicSlot::getGlobalName() {
+	lock_guard<mutex> aliveGuard(this->alive->stateMutex);
+	if (this->alive->state) {
+		return this->slot->getGlobalName();
+	}
+	return "";
+}
+

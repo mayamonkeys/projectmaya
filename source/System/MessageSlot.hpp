@@ -21,6 +21,8 @@ namespace ProjectMaya {
 			void drop(std::shared_ptr<Message> message);
 			bool hasMessages();
 			std::shared_ptr<Message> get();
+			std::string getId();
+			std::string getGlobalName();
 
 			template <class TMessage>
 			void emit(TMessage message) {
