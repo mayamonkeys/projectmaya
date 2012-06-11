@@ -6,6 +6,7 @@
 #include <thread>
 
 #include "Logger.hpp"
+#include "MessageTypes/IntMessage.hpp"
 #include "MessageTypes/StringMessage.hpp"
 
 using namespace ProjectMaya;
@@ -31,6 +32,7 @@ void Logger::operator()() {
 	while(!this->shouldShutdown()) {
 		while(defaultSlot->hasMessages()) {
 			shared_ptr<Message> m = defaultSlot->get();
+			string msg("unkown message");
 
 			// check type
 			if (m->isType("string")) {
@@ -38,12 +40,22 @@ void Logger::operator()() {
 
 				// security check (fails if cast was not successful)
 				if (m2 != nullptr) {
-					string msg = m2->getData();
-					// formatting: timestamp and message
-					auto now = system_clock::to_time_t(system_clock::now());
-					clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
+					msg = m2->getData();
+				}
+			} else if (m->isType("int")) {
+				IntMessage* m2 = dynamic_cast<IntMessage*>(m.get());
+
+				// security check
+				if (m2 != nullptr) {
+					stringstream stream;
+					stream << "Event (id="<< m2->getData() << ")";
+					msg = stream.str();
 				}
 			}
+
+			// formatting: timestamp and message
+			auto now = system_clock::to_time_t(system_clock::now());
+			clog << "[" << put_time(localtime(&now), "%H:%M:%S") << "]" << msg << endl;
 		}
 
 		sleep_for(stime);
