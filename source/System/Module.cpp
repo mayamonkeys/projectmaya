@@ -146,7 +146,11 @@ void Module::threadFunc(shared_ptr<THelper> helper) {
 
 	lock_guard<mutex> runGuard(helper->phaseRun);
 	if (!helper->shutdown.load() && !helper->dummy) {
-		(*helper->payload)();
+		try {
+			(*helper->payload)();
+		} catch(...) {
+			/* nop */
+		}
 	}
 	helper->readyRun.unlock();
 
