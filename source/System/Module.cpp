@@ -10,6 +10,7 @@ using std::lock_guard;
 using std::mutex;
 using std::recursive_mutex;
 using std::shared_ptr;
+using std::string;
 using std::thread;
 using std::unique_ptr;
 
@@ -53,6 +54,11 @@ Module::~Module(){
 
 	// end thread
 	this->myThread->join();
+}
+
+MessagePublicSlot Module::getMessageSlot(string id) {
+	lock_guard<recursive_mutex> memberGuard(this->memberMutex); // optional?
+	return this->helper->messageDriver->getSlot(id)->getPublicSlot();
 }
 
 bool Module::shouldShutdown() {
@@ -141,6 +147,7 @@ bool Module::wasStarted() const {
 void Module::threadFunc(shared_ptr<THelper> helper) {
 	if (!helper->dummy) {
 		helper->payload = helper->creator();
+		helper->payload->setupMessageDriver(helper->messageDriver, true);
 	}
 	helper->readyInit.unlock();
 
@@ -161,6 +168,9 @@ void Module::threadFunc(shared_ptr<THelper> helper) {
 }
 
 void Module::startThread() {
+	// create message system
+	this->helper->messageDriver = shared_ptr<MessageDriver>(new MessageDriver());
+
 	// prepare helper
 	this->helper->phaseRun.lock();
 	this->helper->phaseCleanup.lock();

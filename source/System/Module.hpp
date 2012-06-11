@@ -6,6 +6,7 @@
 #include <mutex>
 #include <thread>
 
+#include "MessageDriver.hpp"
 #include "ModulePayload.hpp"
 
 namespace ProjectMaya {
@@ -38,6 +39,8 @@ namespace ProjectMaya {
 				return static_cast<TPayload&>(*this->helper->payload);
 			}
 
+			MessagePublicSlot getMessageSlot(std::string id);
+
 			bool wasStarted() const;
 			bool shouldShutdown();
 			bool shouldDestroy();
@@ -55,6 +58,7 @@ namespace ProjectMaya {
 			struct THelper {
 				TPayloadCreator creator;
 				ModulePayload* payload = nullptr;
+				std::shared_ptr<MessageDriver> messageDriver;
 				std::mutex phaseRun;
 				std::mutex phaseCleanup;
 				std::mutex readyInit;
