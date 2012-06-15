@@ -3,7 +3,11 @@
 
 namespace ProjectMaya {
 
+	/**
+	 * Maps int types to events emitted by the user
+	 */
 	enum UserEventTable {
+		/// User requested program shutdown
 		EXIT
 	};
 

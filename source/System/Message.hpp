@@ -8,6 +8,9 @@ namespace ProjectMaya{
 
 	class MessagePublicSlot;
 
+	/**
+	 * Copyable object that will be send to/from message slot
+	 */
 	class Message {
 		public:
 			Message(std::string type);

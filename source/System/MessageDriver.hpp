@@ -10,6 +10,9 @@
 
 namespace ProjectMaya {
 
+	/**
+	 * Manages message slots, is visible/controllable for/of module payloads
+	 */
 	class MessageDriver {
 		public:
 			std::shared_ptr<MessageSlot> createSlot(std::string id);

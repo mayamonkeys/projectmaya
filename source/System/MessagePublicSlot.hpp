@@ -11,6 +11,11 @@ namespace ProjectMaya {
 
 	class MessageSlot;
 
+	/**
+	 * Public, thread safe message slot
+	 *
+	 * Also accessible (without effect) if origin was deleted
+	 */
 	class MessagePublicSlot {
 		public:
 			struct Alive {
