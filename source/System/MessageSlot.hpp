@@ -4,7 +4,8 @@
 #include <forward_list>
 #include <memory>
 #include <string>
-#include <queue>
+
+#include "Thread/LockFreeQueue.hpp"
 
 #include "Message.hpp"
 #include "MessagePublicSlot.hpp"
@@ -28,9 +29,6 @@ namespace ProjectMaya {
 			/// Enqueue a new message
 			void drop(std::shared_ptr<Message> message);
 
-			/// Ask if queue holds messages, that should be processed
-			bool hasMessages();
-
 			/// Get first message from queue
 			std::shared_ptr<Message> get();
 
@@ -53,12 +51,11 @@ namespace ProjectMaya {
 
 		private:
 			std::mutex targetsMutex;
-			std::mutex queueMutex;
 
 			std::string id;
 			std::shared_ptr<MessagePublicSlot::Alive> alive;
 			std::forward_list<MessagePublicSlot> targets;
-			std::queue<std::shared_ptr<Message>> messages;
+			LockFreeQueue<Message> messages;
 	};
 
 }
