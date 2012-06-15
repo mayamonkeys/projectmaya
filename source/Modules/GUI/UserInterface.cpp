@@ -29,6 +29,12 @@ void keyCallbackC(int id, int state) {
 	keyCallbackFunc(id, state);
 }
 
+typedef function<void(int, int)> TcharCallbackFunc;
+TcharCallbackFunc charCallbackFunc;
+void charCallbackC(int codepoint, int state) {
+	charCallbackFunc(codepoint, state);
+}
+
 UserInterface::UserInterface() {
 }
 
@@ -49,6 +55,7 @@ void UserInterface::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, 
 		this->getMessageDriver()->createSlot("keyEvents");
 		this->getMessageDriver()->createSlot("log");
 		this->getMessageDriver()->createSlot("user");
+		this->getMessageDriver()->createSlot("charInputs");
 	}
 }
 
@@ -74,6 +81,8 @@ void UserInterface::initGLFW() {
 	// set callbacks
 	keyCallbackFunc = bind(&UserInterface::keyCallback, this, _1, _2);
 	glfwSetKeyCallback(&keyCallbackC);
+	charCallbackFunc = bind(&UserInterface::charCallback, this, _1, _2);
+	glfwSetCharCallback(&charCallbackC);
 }
 
 void UserInterface::initOpenGL() const {
@@ -178,6 +187,14 @@ void UserInterface::keyCallback(int id, int state) {
 		code *= -1;
 	}
 	this->getMessageDriver()->getSlot("keyEvents")->emit(IntMessage(code));
+}
+
+void UserInterface::charCallback(int codepoint, int state) {
+	if ((state == GLFW_PRESS) && (codepoint <= 255)) {
+		stringstream stream;
+		stream << static_cast<unsigned char>(codepoint);
+		this->getMessageDriver()->getSlot("charInputs")->emit(StringMessage(stream.str()));
+	}
 }
 
 void UserInterface::queryVideoModes() {

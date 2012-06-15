@@ -27,6 +27,7 @@ namespace ProjectMaya {
 			void renderScene() const;
 
 			void keyCallback(int id, int state);
+			void charCallback(int codepoint, int state);
 
 			void queryVideoModes();
 	};
