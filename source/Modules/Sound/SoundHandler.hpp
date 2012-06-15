@@ -15,6 +15,7 @@ namespace ProjectMaya {
 	class SoundHandler : public ModulePayload {
 		public:
 			explicit SoundHandler();
+      ~SoundHandler();
 
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
@@ -26,6 +27,7 @@ namespace ProjectMaya {
 			void checkForErrors();
 			void printDevices(ALCenum which, const std::string& kind);
 			void printALCInfo();
+      void playDummySound();
 	};
 
 }
