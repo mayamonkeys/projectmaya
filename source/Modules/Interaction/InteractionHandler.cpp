@@ -45,8 +45,6 @@ void InteractionHandler::operator()() {
 						keyCode *= -1;
 					}
 
-					this->getMessageDriver()->getSlot("log")->emit(StringMessage("key pressed"));
-
 					if (keyCode == GLFW_KEY_ESC) {
 						this->getMessageDriver()->getSlot("userEvents")->emit(IntMessage(UserEventTable::EXIT));
 					}
