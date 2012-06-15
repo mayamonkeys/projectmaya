@@ -7,6 +7,8 @@
 #include <AL/al.h>
 #include <AL/alext.h>
 
+#include <vorbis/vorbisfile.h>
+
 #include "MessageTypes/StringMessage.hpp"
 #include "SoundHandler.hpp"
 
@@ -63,7 +65,7 @@ void SoundHandler::checkForErrors() {
 
     if(error != AL_NO_ERROR)
       this->getMessageDriver()->getSlot("log")->emit(StringMessage("AL error occured"));
-      //			throw new runtime_error("AL error occured" /* , (const char*)alGetString(error) */);
+    //			throw new runtime_error("AL error occured" /* , (const char*)alGetString(error) */);
   }
 }
 
@@ -119,7 +121,7 @@ void SoundHandler::playDummySound() {
   /* create default listener */
   alListener3f(AL_POSITION, 0, 0, 0);
   alListener3f(AL_VELOCITY, 0, 0, 0);
-//  alListener3f(AL_ORIENTATION, 0, 0, -1); /// TODO: forward then up vector
+  //  alListener3f(AL_ORIENTATION, 0, 0, -1); /// TODO: forward then up vector
   checkForErrors();
 
   /* create default source */
