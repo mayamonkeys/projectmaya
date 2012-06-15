@@ -55,7 +55,6 @@ void UserInterface::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, 
 		this->getMessageDriver()->createSlot("keyEvents");
 		this->getMessageDriver()->createSlot("log");
 		this->getMessageDriver()->createSlot("user");
-		this->getMessageDriver()->createSlot("charInputs");
 	}
 }
 
@@ -193,7 +192,7 @@ void UserInterface::charCallback(int codepoint, int state) {
 	if ((state == GLFW_PRESS) && (codepoint <= 255)) {
 		stringstream stream;
 		stream << static_cast<unsigned char>(codepoint);
-		this->getMessageDriver()->getSlot("charInputs")->emit(StringMessage(stream.str()));
+		this->getMessageDriver()->getSlot("keyEvents")->emit(StringMessage(stream.str()));
 	}
 }
 

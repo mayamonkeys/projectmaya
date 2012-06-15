@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <sstream>
 #include <thread>
 #include <GL/glfw.h>
 
@@ -14,7 +15,7 @@ using std::chrono::milliseconds;
 using std::lock_guard;
 using std::mutex;
 using std::shared_ptr;
-using std::string;
+using std::stringstream;
 using std::this_thread::sleep_for;
 
 InteractionHandler::InteractionHandler() {
@@ -24,7 +25,7 @@ void InteractionHandler::operator()() {
 	milliseconds stime(20);
 	shared_ptr<MessageSlot> keySlot = this->getMessageDriver()->getSlot("keys");
 	bool scriptInput = false;
-	string script("");
+	stringstream script;
 
 	while(!this->shouldShutdown()) {
 		shared_ptr<Message> m;
@@ -55,13 +56,13 @@ void InteractionHandler::operator()() {
 							scriptInput = false;
 						} else {
 							scriptInput = true;
-							script = "";
+							script.str("");
 						}
 					}
 
-					if (keyCode == GLFW_KEY_ENTER) {
-						this->getMessageDriver()->getSlot("log")->emit(StringMessage(script));
-						script = "";
+					if ((keyCode == GLFW_KEY_ENTER) && pressed && scriptInput) {
+						this->getMessageDriver()->getSlot("exec")->emit(StringMessage(script.str()));
+						script.str("");
 					}
 				}
 			} else if (m->isType("string")) {
@@ -69,6 +70,9 @@ void InteractionHandler::operator()() {
 
 				// security check
 				if (m2 != nullptr) {
+					if (scriptInput) {
+						script << m2->getData();
+					}
 				}
 			}
 		}
