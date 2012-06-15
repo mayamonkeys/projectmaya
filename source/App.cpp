@@ -36,6 +36,8 @@ App::App() {
 	this->mUserInterface->getMessageSlot("keyEvents").addTarget(this->mInteractionHandler->getMessageSlot("keys"));
 
 	this->mInteractionHandler->getMessageSlot("userEvents").addTarget(this->mUserInterface->getMessageSlot("user"));
+
+	this->mInteractionHandler->getMessageSlot("exec").addTarget(this->mInterpreter->getMessageSlot("exec"));
 }
 
 /**
