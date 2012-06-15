@@ -1,6 +1,7 @@
 #ifndef MESSAGEPUBLICSLOT_HPP
 #define MESSAGEPUBLICSLOT_HPP
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -18,9 +19,16 @@ namespace ProjectMaya {
 	 */
 	class MessagePublicSlot {
 		public:
+			/**
+			 * Handles alive state of the origin slot to avoid access after free
+			 */
 			struct Alive {
-				std::mutex stateMutex;
-				bool state;
+				std::mutex destructorMutex;
+				std::atomic<bool> alive;
+				std::atomic<int> accessCount;
+
+				bool startAccess();
+				void stopAccess();
 			};
 
 			MessagePublicSlot(MessageSlot* slot, std::shared_ptr<Alive> alive);

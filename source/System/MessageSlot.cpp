@@ -15,12 +15,14 @@ using std::stringstream;
 MessageSlot::MessageSlot(string id) {
 	this->id = id;
 	this->alive = shared_ptr<MessagePublicSlot::Alive>(new MessagePublicSlot::Alive);
-	this->alive->state = true;
+	this->alive->alive.store(true);
+	this->alive->destructorMutex.unlock();
+	this->alive->accessCount.store(0);
 }
 
 MessageSlot::~MessageSlot() {
-	lock_guard<mutex> aliveGuard(this->alive->stateMutex);
-	this->alive->state = false;
+	this->alive->alive.store(false);
+	this->alive->destructorMutex.lock();
 }
 
 MessagePublicSlot MessageSlot::getPublicSlot() {
