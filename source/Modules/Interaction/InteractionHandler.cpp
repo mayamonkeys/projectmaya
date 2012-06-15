@@ -14,6 +14,7 @@ using std::chrono::milliseconds;
 using std::lock_guard;
 using std::mutex;
 using std::shared_ptr;
+using std::string;
 using std::this_thread::sleep_for;
 
 InteractionHandler::InteractionHandler() {
@@ -22,6 +23,8 @@ InteractionHandler::InteractionHandler() {
 void InteractionHandler::operator()() {
 	milliseconds stime(20);
 	shared_ptr<MessageSlot> keySlot = this->getMessageDriver()->getSlot("keys");
+	bool scriptInput = false;
+	string script("");
 
 	while(!this->shouldShutdown()) {
 		shared_ptr<Message> m;
@@ -46,6 +49,26 @@ void InteractionHandler::operator()() {
 					if (keyCode == GLFW_KEY_ESC) {
 						this->getMessageDriver()->getSlot("userEvents")->emit(IntMessage(UserEventTable::EXIT));
 					}
+
+					if ((keyCode == GLFW_KEY_F12) && pressed) {
+						if (scriptInput) {
+							scriptInput = false;
+						} else {
+							scriptInput = true;
+							script = "";
+						}
+					}
+
+					if (keyCode == GLFW_KEY_ENTER) {
+						this->getMessageDriver()->getSlot("log")->emit(StringMessage(script));
+						script = "";
+					}
+				}
+			} else if (m->isType("string")) {
+				StringMessage* m2 = dynamic_cast<StringMessage*>(m.get());
+
+				// security check
+				if (m2 != nullptr) {
 				}
 			}
 		}
@@ -61,6 +84,8 @@ void InteractionHandler::setupMessageDriver(shared_ptr<MessageDriver> messageDri
 		this->getMessageDriver()->createSlot("keys");
 		this->getMessageDriver()->createSlot("log");
 		this->getMessageDriver()->createSlot("userEvents");
+		this->getMessageDriver()->createSlot("chars");
+		this->getMessageDriver()->createSlot("exec");
 	}
 }
 
