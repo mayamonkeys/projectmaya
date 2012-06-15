@@ -41,5 +41,4 @@ def build(bld):
 	task_make.run()
 	
 	bld.read_stlib('openal', paths = [path])
-	print(bld.path.abspath())
 	
