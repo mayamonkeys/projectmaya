@@ -54,7 +54,7 @@ void Interpreter::exposeToState(lua_State* luaState) {
 	// Register
 	getGlobalNamespace(luaState)
 		.beginClass<Interpreter>("Interpreter")
-			.addMethod("reportSuccess", &Interpreter::reportSuccess)
+			.addFunction("reportSuccess", &Interpreter::reportSuccess)
 		.endClass();
 
 	//Push concrete objects over
