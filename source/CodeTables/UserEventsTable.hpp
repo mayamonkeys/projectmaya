@@ -8,7 +8,13 @@ namespace ProjectMaya {
 	 */
 	enum UserEventTable {
 		/// User requested program shutdown
-		EXIT
+		EXIT,
+
+		/// Open scripting console
+		CONSOLE_OPEN,
+
+		/// Close scripting console
+		CONSOLE_CLOSE
 	};
 
 }

@@ -52,9 +52,11 @@ void InteractionHandler::operator()() {
 					if ((keyCode == GLFW_KEY_F12) && pressed) {
 						if (scriptInput) {
 							scriptInput = false;
+							this->getMessageDriver()->getSlot("userEvents")->emit(IntMessage(UserEventTable::CONSOLE_OPEN));
 						} else {
 							scriptInput = true;
 							script.str("");
+							this->getMessageDriver()->getSlot("userEvents")->emit(IntMessage(UserEventTable::CONSOLE_CLOSE));
 						}
 					}
 
