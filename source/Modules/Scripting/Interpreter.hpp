@@ -27,8 +27,11 @@ namespace ProjectMaya {
 			/// Exposes specific functionality to the environment.
 			void exposeToState(lua_State* luaState);
 
-			// dummy function, to test the interpreter
+			/// dummy function, to test the interpreter
 			void reportSuccess();
+
+			/// replace luas print function
+			int print();
 	};
 
 }

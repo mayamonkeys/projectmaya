@@ -1,6 +1,8 @@
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
+#include <string>
 #include <thread>
 
 /// \warning we have to include lua before luabridge
@@ -17,6 +19,8 @@ using namespace luabridge;
 using std::chrono::milliseconds;
 using std::runtime_error;
 using std::shared_ptr;
+using std::string;
+using std::stringstream;
 using std::this_thread::sleep_for;
 
 Interpreter::Interpreter() {
@@ -50,8 +54,25 @@ void Interpreter::operator()() {
 
 				// security check
 				if (m2 != nullptr) {
-					this->getMessageDriver()->getSlot("log")->emit(StringMessage(m2->getData()));
-					luaL_dostring(luaState, m2->getData().c_str());
+					string script = m2->getData();
+					stringstream logmsg;
+
+					// execute
+					logmsg << "Exec: \"\"\"" << script << "\"\"\"";
+					bool error = luaL_dostring(luaState, script.c_str());
+
+					// get result
+					logmsg << " (";
+					if (error) {
+						logmsg << lua_tostring(luaState, -1);
+						lua_pop(luaState, 1);
+					} else {
+						logmsg << "ok";
+					}
+					logmsg << ")";
+
+					// log
+					this->getMessageDriver()->getSlot("log")->emit(StringMessage(logmsg.str()));
 				}
 			}
 		}
@@ -78,13 +99,47 @@ void Interpreter::exposeToState(lua_State* luaState) {
 	getGlobalNamespace(luaState)
 		.beginClass<Interpreter>("Interpreter")
 			.addFunction("reportSuccess", &Interpreter::reportSuccess)
+			.addFunction("print", &Interpreter::print)
 		.endClass();
 
 	//Push concrete objects over
 	push(luaState, this);
 	lua_setglobal(luaState, "Interpreter");
+
+	// Replace print
+	luaL_dostring(luaState, "function print(...) Interpreter:print(...) end");
 }
 
 void Interpreter::reportSuccess() {
 	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Successfully called method from Lua"));
 }
+
+int Interpreter::print() {
+	int nArgs = lua_gettop(luaState);
+	lua_getglobal(luaState, "tostring");
+	stringstream stream;
+
+	// dump all parameters
+	// no idea, why to start by 2 :D
+	for(int i = 2; i <= nArgs; i++) {
+		const char *s;
+		lua_pushvalue(luaState, -1);
+		lua_pushvalue(luaState, i);
+		lua_call(luaState, 1, 1);
+		s = lua_tostring(luaState, -1);
+		if(s == NULL) {
+			return luaL_error(luaState, LUA_QL("tostring") " must return a string to ", LUA_QL("print"));
+		}
+
+		if(i > 2) {
+			stream << "\t";
+		}
+
+		stream << s;
+		lua_pop(luaState, 1);
+	}
+
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
+	return 0;
+}
+
