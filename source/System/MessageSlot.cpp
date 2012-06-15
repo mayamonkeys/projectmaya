@@ -35,20 +35,11 @@ void MessageSlot::addTarget(MessagePublicSlot target) {
 }
 
 void MessageSlot::drop(shared_ptr<Message> message) {
-	lock_guard<mutex> queueGuard(this->queueMutex);
-	this->messages.push(message);
-}
-
-bool MessageSlot::hasMessages() {
-	lock_guard<mutex> queueGuard(this->queueMutex);
-	return !this->messages.empty();
+	this->messages.enqueue(message);
 }
 
 shared_ptr<Message> MessageSlot::get() {
-	lock_guard<mutex> queueGuard(this->queueMutex);
-	shared_ptr<Message> m = this->messages.front();
-	this->messages.pop();
-	return m;
+	return this->messages.dequeue();
 }
 
 string MessageSlot::getId() {

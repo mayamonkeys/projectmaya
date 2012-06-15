@@ -94,9 +94,8 @@ void UserInterface::render() {
 
 	while(glfwGetWindowParam(GLFW_OPENED) && !this->shouldShutdown()) {
 		// handle events
-		while (userSlot->hasMessages()) {
-			shared_ptr<Message> m = userSlot->get();
-
+		shared_ptr<Message> m;
+		while ((m = userSlot->get()).get() != nullptr) {
 			// check type
 			if (m->isType("int")) {
 				IntMessage* m2 = dynamic_cast<IntMessage*>(m.get());

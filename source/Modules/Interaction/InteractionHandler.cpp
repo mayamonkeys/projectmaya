@@ -24,9 +24,8 @@ void InteractionHandler::operator()() {
 	shared_ptr<MessageSlot> keySlot = this->getMessageDriver()->getSlot("keys");
 
 	while(!this->shouldShutdown()) {
-		while(keySlot->hasMessages()) {
-			shared_ptr<Message> m(keySlot->get());
-
+		shared_ptr<Message> m;
+		while((m = keySlot->get()).get() != nullptr) {
 			// check type
 			if (m->isType("int")) {
 				IntMessage* m2 = dynamic_cast<IntMessage*>(m.get());

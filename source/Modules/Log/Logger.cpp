@@ -28,10 +28,10 @@ using std::this_thread::sleep_for;
 void Logger::operator()() {
 	milliseconds stime(20);
 	shared_ptr<MessageSlot> defaultSlot = this->getMessageDriver()->getSlot("defaultLog");
+	shared_ptr<Message> m;
 
-	while(!this->shouldShutdown() || defaultSlot->hasMessages()) {
-		while(defaultSlot->hasMessages()) {
-			shared_ptr<Message> m = defaultSlot->get();
+	while(!this->shouldShutdown() || ((m = defaultSlot->get()).get() != nullptr)) {
+		while((m = defaultSlot->get()).get() != nullptr) {
 			string msg("unkown message");
 
 			// check type
