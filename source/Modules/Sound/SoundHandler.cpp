@@ -28,7 +28,6 @@ SoundHandler::SoundHandler() {
   device = alcOpenDevice(NULL);
   context = alcCreateContext(device, NULL);
   alcMakeContextCurrent(context);
-  checkForErrors();
 }
 
 SoundHandler::~SoundHandler() {
@@ -38,6 +37,9 @@ SoundHandler::~SoundHandler() {
 }
 
 void SoundHandler::operator()() {
+  /* we have to check the initialization here, b/c want to emit a msg on fail */
+  checkForErrors();
+
   printALCInfo();
   checkForErrors();
   playDummySound();
