@@ -25,18 +25,9 @@ using std::this_thread::sleep_for;
 
 
 Interpreter::Interpreter() {
-
-}
-
-Interpreter::~Interpreter() {
-	lua_close(luaState);
-}
-
-void Interpreter::operator()() {
-	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Initializing the Lua engine"));
-
 	luaState = luaL_newstate();
 
+  /* in case you want to handle the failure.. do not emit a msg in the ctor, b/c the slot is not yet constructed */
 	if(luaState == NULL)
 		throw new runtime_error("could not initialize lua");
 
@@ -45,7 +36,14 @@ void Interpreter::operator()() {
 
   /* setup public interfaces */
 	exposeToState(luaState);
+}
 
+Interpreter::~Interpreter() {
+	lua_close(luaState);
+}
+
+void Interpreter::operator()() {
+	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Initializing the Lua engine"));
 
 	// listen to events
 	shared_ptr<MessageSlot> execSlot = this->getMessageDriver()->getSlot("exec");
