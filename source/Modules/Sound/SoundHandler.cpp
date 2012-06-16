@@ -119,9 +119,13 @@ void SoundHandler::printALCInfo() {
 
 void SoundHandler::playDummySound() {
   /* create default listener */
+
+  // forward then up vector
+  ALfloat flValues[6] = {0, 1, 0, 0, 0, 1};
+
   alListener3f(AL_POSITION, 0, 0, 0);
   alListener3f(AL_VELOCITY, 0, 0, 0);
-  //  alListener3f(AL_ORIENTATION, 0, 0, -1); /// TODO: forward then up vector
+  alListenerfv(AL_ORIENTATION, flValues);
   checkForErrors();
 
   /* create default source */
