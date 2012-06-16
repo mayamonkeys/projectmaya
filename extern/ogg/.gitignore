@@ -1,0 +1,19 @@
+# build files
+*.a
+*.def
+*.dll
+*.dynlib
+*.la
+*.lai
+*.lo
+*.log
+*.o
+*.pc
+*.Po
+*.Plo
+*.so
+config.h
+config.status
+config_types.h
+Makefile
+

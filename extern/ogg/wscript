@@ -1,0 +1,34 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+import re
+import sys
+from waflib.TaskGen import feature
+
+@feature('configure')
+def configure_config(self):
+	srcpath = self.srcpath
+	self.bld(rule=' cd ' + srcpath + ' && ./configure --enable-static --disable-shared')
+	self.source= []
+
+def configure(conf):
+	path = conf.path.abspath()
+	
+	# execute configure
+	conf.check_cxx(features='configure', msg='config ogg', srcpath=path)
+	
+	# store Makefile path
+	conf.env.OGG_MAKEPATH = path
+	
+	# add include to env
+	conf.env.append_unique('INCLUDES', path + '/include')
+
+def build(bld):
+	# make (force run)
+	taskgen_make = bld(rule='make --directory=' + bld.env.OGG_MAKEPATH, name='ogg_make', always=True)
+	taskgen_make.post()
+	task_make = taskgen_make.tasks[0]
+	task_make.run()
+	
+	bld.read_stlib('ogg', paths = [bld.env.OGG_MAKEPATH + "/src/.libs"])
+

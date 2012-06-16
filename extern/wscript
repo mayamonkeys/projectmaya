@@ -6,10 +6,14 @@ def configure(conf):
 	conf.recurse('openal')
 	conf.recurse('lua')
 	conf.recurse('LuaBridge')
+	conf.recurse('ogg')
+	conf.recurse('vorbis')
 
 def build(bld):
 	bld.recurse('glfw')
 	bld.recurse('openal')
 	bld.recurse('lua')
 	bld.recurse('LuaBridge')
+	bld.recurse('ogg')
+	bld.recurse('vorbis')
 
