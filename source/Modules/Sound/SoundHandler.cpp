@@ -105,12 +105,12 @@ void SoundHandler::printALCInfo() {
   }	else {
     stream << "No device enumeration available";
     this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
-    stream << "";
+    stream.str("");
   }
 
   stream << "Default device: " << alcGetString(device, ALC_DEFAULT_DEVICE_SPECIFIER);
   this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
-  stream << "";
+  stream.str("");
 
 
   alcGetIntegerv(device, ALC_MAJOR_VERSION, 1, &major);
