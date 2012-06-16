@@ -23,7 +23,13 @@ using std::string;
 using std::stringstream;
 using std::this_thread::sleep_for;
 
+
 Interpreter::Interpreter() {
+
+}
+
+Interpreter::~Interpreter() {
+	lua_close(luaState);
 }
 
 void Interpreter::operator()() {
@@ -37,9 +43,9 @@ void Interpreter::operator()() {
 	/* load standard libraries */
 	luaL_openlibs(luaState);
 
+  /* setup public interfaces */
 	exposeToState(luaState);
 
-	this->getMessageDriver()->getSlot("log")->emit(StringMessage("Lua engine successfully initialized"));
 
 	// listen to events
 	shared_ptr<MessageSlot> execSlot = this->getMessageDriver()->getSlot("exec");
@@ -90,10 +96,6 @@ void Interpreter::setupMessageDriver(shared_ptr<MessageDriver> messageDriver, bo
 	}
 }
 
-Interpreter::~Interpreter() {
-	lua_close(luaState);
-}
-
 void Interpreter::exposeToState(lua_State* luaState) {
 	// Register
 	getGlobalNamespace(luaState)
@@ -102,11 +104,11 @@ void Interpreter::exposeToState(lua_State* luaState) {
 			.addFunction("print", &Interpreter::print)
 		.endClass();
 
-	//Push concrete objects over
+	// Push concrete objects over
 	push(luaState, this);
 	lua_setglobal(luaState, "Interpreter");
 
-	// Replace print
+	// Replace print in order to handle it outside of the Lua environment
 	luaL_dostring(luaState, "function print(...) Interpreter:print(...) end");
 }
 
@@ -127,6 +129,7 @@ int Interpreter::print() {
 		lua_pushvalue(luaState, i);
 		lua_call(luaState, 1, 1);
 		s = lua_tostring(luaState, -1);
+
 		if(s == NULL) {
 			return luaL_error(luaState, LUA_QL("tostring") " must return a string to ", LUA_QL("print"));
 		}
@@ -140,6 +143,7 @@ int Interpreter::print() {
 	}
 
 	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
+
 	return 0;
 }
 

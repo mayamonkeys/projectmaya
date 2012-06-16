@@ -18,7 +18,13 @@ using std::shared_ptr;
 using std::stringstream;
 using std::this_thread::sleep_for;
 
+
 InteractionHandler::InteractionHandler() {
+
+}
+
+InteractionHandler::~InteractionHandler() {
+
 }
 
 void InteractionHandler::operator()() {

@@ -1,5 +1,5 @@
-#ifndef DUMMYOBJECTS_H
-#define DUMMYOBJECTS_H
+#ifndef DUMMYOBJECTS_HPP
+#define DUMMYOBJECTS_HPP
 
 #include <GL/gl.h>
 

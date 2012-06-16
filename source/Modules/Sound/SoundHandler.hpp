@@ -1,5 +1,5 @@
-#ifndef SOUNDHANDLER_H
-#define SOUNDHANDLER_H
+#ifndef SOUNDHANDLER_HPP
+#define SOUNDHANDLER_HPP
 
 #include <string>
 

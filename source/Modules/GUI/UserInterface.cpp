@@ -22,6 +22,7 @@ using std::stringstream;
 using namespace std::placeholders;
 using namespace ProjectMaya;
 
+
 // c callbacks
 typedef function<void(int, int)> TkeyCallbackFunc;
 TkeyCallbackFunc keyCallbackFunc;
@@ -45,6 +46,7 @@ UserInterface::~UserInterface() {
 void UserInterface::operator()() {
 	initGLFW();
 	initOpenGL();
+
 	render();
 }
 

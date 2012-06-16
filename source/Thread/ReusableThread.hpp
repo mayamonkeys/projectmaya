@@ -1,5 +1,5 @@
-#ifndef REUSABLETHREAD_H
-#define REUSABLETHREAD_H
+#ifndef REUSABLETHREAD_HPP
+#define REUSABLETHREAD_HPP
 
 #include <atomic>
 #include <functional>

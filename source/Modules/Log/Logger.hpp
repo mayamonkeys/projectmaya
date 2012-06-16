@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LOGGER_HPP
+#define LOGGER_HPP
 
 #include <string>
 #include <mutex>
@@ -14,6 +14,8 @@ namespace ProjectMaya {
 	 */
 	class Logger : public ModulePayload {
 		public:
+      explicit Logger();
+      ~Logger();
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime) override;
 	};

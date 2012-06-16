@@ -1,5 +1,5 @@
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef INTERPRETER_HPP
+#define INTERPRETER_HPP
 
 #include <memory>
 

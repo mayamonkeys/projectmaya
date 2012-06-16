@@ -25,6 +25,15 @@ using std::put_time;
 using std::shared_ptr;
 using std::this_thread::sleep_for;
 
+
+Logger::Logger() {
+
+}
+
+Logger::~Logger() {
+
+}
+
 void Logger::operator()() {
 	milliseconds stime(20);
 	shared_ptr<MessageSlot> defaultSlot = this->getMessageDriver()->getSlot("defaultLog");

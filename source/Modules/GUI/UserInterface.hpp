@@ -1,5 +1,5 @@
-#ifndef USERINTERFACE_H
-#define USERINTERFACE_H
+#ifndef USERINTERFACE_HPP
+#define USERINTERFACE_HPP
 
 #include <memory>
 
@@ -13,7 +13,7 @@ namespace ProjectMaya {
 	 */
 	class UserInterface : public ModulePayload {
 		public:
-			UserInterface();
+			explicit UserInterface();
 			~UserInterface();
 			void operator()() override;
 			void setupMessageDriver(std::shared_ptr<MessageDriver> messageDriver, bool firstTime);

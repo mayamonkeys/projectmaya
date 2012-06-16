@@ -1,5 +1,5 @@
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef MODULE_HPP
+#define MODULE_HPP
 
 #include <atomic>
 #include <memory>
