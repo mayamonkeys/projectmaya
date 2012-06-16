@@ -3,6 +3,7 @@
 #include <GL/glfw.h>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include <config.h>
 
@@ -18,6 +19,7 @@ using std::noskipws;
 using std::runtime_error;
 using std::shared_ptr;
 using std::stringstream;
+using std::string;
 
 using namespace std::placeholders;
 using namespace ProjectMaya;
@@ -91,6 +93,8 @@ void UserInterface::initOpenGL() const {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glEnable(GL_TEXTURE_2D);
+
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 }
@@ -101,6 +105,8 @@ void UserInterface::render() {
 	double currentTime;
 	double deltaRotate = 0.0;
 	shared_ptr<MessageSlot> userSlot(this->getMessageDriver()->getSlot("user"));
+
+	GLuint texId = loadTexture("./data/graphic/128/test.tga");
 
 	while(glfwGetWindowParam(GLFW_OPENED) && !this->shouldShutdown()) {
 		// handle events
@@ -121,12 +127,12 @@ void UserInterface::render() {
 			}
 		}
 
-		currentTime = glfwGetTime();
-		deltaRotate += (currentTime - oldTime) * 0.1 * 360;
-		oldTime = currentTime;
+		//currentTime = glfwGetTime();
+		//deltaRotate += (currentTime - oldTime) * 0.1 * 360;
+		//oldTime = currentTime;
 
-		renderOpenGL(deltaRotate);
-		renderScene();
+		//renderOpenGL(deltaRotate);
+		renderScene(texId);
 
 		glfwSwapBuffers();
 	}
@@ -142,44 +148,22 @@ void UserInterface::renderOpenGL(const double& deltaRotate) const {
 }
 
 /* render some examples, by using different methods */
-void UserInterface::renderScene() const {
+void UserInterface::renderScene(const GLuint& textureId) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glColor4f(1.0f, 0.3f, 0.0f, 0.6f);
+	//glColor4f(1.0f, 0.3f, 0.0f, 0.6f);
 
 	/* scale our box down */
 	glScalef(0.3f, 0.3f, 0.3f);
 
-
-	/// \todo Method 1: Use glDrawElements with indexed triangles, best performance */
-
-
-	/* Method 2: Copy arrays to graphics card and draw at once, medium performance */
+	glBindTexture(GL_TEXTURE_2D, textureId);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, DummyBox::front);
-	glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::front) / sizeof(GLfloat)) / 3);
-
-	glVertexPointer(3, GL_FLOAT, 0, DummyBox::back);
-	glDrawArrays(GL_LINE_STRIP, 0, (sizeof(DummyBox::back) / sizeof(GLfloat)) / 3);
-
-	glVertexPointer(3, GL_FLOAT, 0, DummyBox::join);
-	glDrawArrays(GL_LINES, 0, (sizeof(DummyBox::join) / sizeof(GLfloat)) / 3);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-
-	/* Method 3: Draw each strip, bad performance */
-
-	glFrontFace(GL_CW);
-
-	glBegin(GL_TRIANGLE_STRIP);
-
-	for(std::size_t i = 0; i < sizeof(DummyTriangle::stripes) / sizeof(GLfloat); i += 3) {
-		glVertex3f(DummyTriangle::stripes[i + 0], DummyTriangle::stripes[i + 1], DummyTriangle::stripes[i + 2]);
+	{
+		glTexCoordPointer(2, GL_FLOAT, 0, Quad::texture);
+		glVertexPointer(3, GL_FLOAT, 0, Quad::edges);
+		glDrawArrays(GL_LINE_STRIP, 0, (sizeof(Quad::edges) / sizeof(GLfloat)) / 3);
 	}
-
-	glEnd();
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void UserInterface::keyCallback(int id, int state) {
@@ -210,4 +194,19 @@ void UserInterface::queryVideoModes() {
 		 stream << list[i].Width << "x" << list[i].Height << " ";
 
 	this->getMessageDriver()->getSlot("log")->emit(StringMessage(stream.str()));
+}
+
+GLuint UserInterface::loadTexture(const string& imagePath) {
+	GLuint id;
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glfwLoadTexture2D(imagePath.c_str(), GLFW_BUILD_MIPMAPS_BIT);
+
+	//check gl params here someday
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	return id;
 }

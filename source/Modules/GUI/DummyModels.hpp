@@ -10,45 +10,20 @@ namespace ProjectMaya {
 	 * Data for a const Dummy Box.
 	 * You probably have to scale the values to your needs.
 	 */
-	namespace DummyBox {
-		static const GLfloat back[] = {
-			-1.0, -1.0, -1.0,
-			1.0, -1.0, -1.0,
-			1.0, 1.0, -1.0,
-			-1.0, 1.0, -1.0,
-			-1.0, -1.0, -1.0
+	namespace Quad {
+		static const GLfloat edges[] = {
+			-1.0, -1.0, 0.0,
+			1.0, -1.0, 0.0,
+			1.0, 1.0, 0.0,
+			-1.0, 1.0, 0.0
 		};
 
-		static const GLfloat front[] = {
-			-1.0, -1.0, 1.0,
-			1.0, -1.0, 1.0,
-			1.0, 1.0, 1.0,
-			-1.0, 1.0, 1.0,
-			-1.0, -1.0, 1.0
-		};
-
-		static const GLfloat join[] = {
-			-1.0, -1.0, 1.0,
-			-1.0, -1.0, -1.0,
-			-1.0, 1.0, 1.0,
-			-1.0, 1.0, -1.0,
-			1.0, -1.0, 1.0,
-			1.0, -1.0, -1.0,
-			1.0, 1.0, 1.0,
-			1.0, 1.0, -1.0
-		};
-	};
-
-	/**
-	 * Data for a const Triangle.
-	 * You probably have to scale the values to your needs.
-	 */
-	namespace DummyTriangle {
-		static const GLfloat stripes[] = {
-			0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 0.0f, 0.0f
-		};
+		static const GLfloat texture[] = {
+			0.0, 0.0,
+			1.0, 0.0,
+			1.0, 1.0,
+			0.0, 1.0
+		}
 	};
 
 }

@@ -2,6 +2,8 @@
 #define USERINTERFACE_HPP
 
 #include <memory>
+#include <string>
+#include <GL/glfw.h>
 
 #include "System/ModulePayload.hpp"
 
@@ -24,12 +26,14 @@ namespace ProjectMaya {
 			void render();
 
 			void renderOpenGL(const double&) const;
-			void renderScene() const;
+			void renderScene(const GLuint& textureId);
 
 			void keyCallback(int id, int state);
 			void charCallback(int codepoint, int state);
 
 			void queryVideoModes();
+
+			GLuint loadTexture(const std::string& imagePath);
 	};
 
 }
