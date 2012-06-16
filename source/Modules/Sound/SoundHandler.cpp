@@ -7,8 +7,6 @@
 #include <AL/al.h>
 #include <AL/alext.h>
 
-#include <vorbis/vorbisfile.h>
-
 #include "MessageTypes/StringMessage.hpp"
 #include "SoundHandler.hpp"
 
@@ -39,6 +37,10 @@ SoundHandler::~SoundHandler() {
 void SoundHandler::operator()() {
   /* we have to check the initialization here, b/c want to emit a msg on fail */
   checkForErrors();
+
+	/// \todo hotfix: implement real error handling
+	if(device == NULL || context == NULL)
+		return;
 
   printALCInfo();
   checkForErrors();
@@ -78,7 +80,7 @@ void SoundHandler::printDevices(ALCenum which, const string& kind) {
   stringstream stream;
   stream << noskipws << "Available " << kind << "devices: ";
 
-  while(*s != '\0')	{
+  while(*s != '\0') {
     stream << s << " ";
 
     while(*s++ != '\0')
