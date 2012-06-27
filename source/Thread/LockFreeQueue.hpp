@@ -41,6 +41,8 @@ namespace ProjectMaya {
 				Pointer* tail;
 				Node* nd = new Node;
 				nd->value = val;
+				Pointer* new_val = new Pointer;
+				new_val->ptr = nd;
 
 				while (true) {
 					tail = this->tail.load();
@@ -48,13 +50,11 @@ namespace ProjectMaya {
 
 					// CAS
 					Pointer* expected = tail;
-					Pointer* new_val = new Pointer({nd, tail->tag + 1});
+					new_val->tag = tail->tag + 1;
 					if (this->tail.compare_exchange_weak(expected, new_val)) {
 						tail->ptr->prev = {nd, tail->tag};
 						delete tail;
 						break;
-					} else {
-						delete new_val;
 					}
 				}
 			}
@@ -65,6 +65,7 @@ namespace ProjectMaya {
 				Pointer* head;
 				Pointer firstNodePrev;
 				std::shared_ptr<T> val;
+				Pointer* new_val = new Pointer;
 
 				while (true) {
 					head = this->head.load();
@@ -80,15 +81,15 @@ namespace ProjectMaya {
 
 							// CAS
 							Pointer* expected = head;
-							Pointer* new_value = new Pointer({firstNodePrev.ptr, head->tag + 1});
-							if (this->head.compare_exchange_weak(expected, new_value)) {
+							new_val->ptr = firstNodePrev.ptr;
+							new_val->tag = head->tag + 1;
+							if (this->head.compare_exchange_weak(expected, new_val)) {
 								delete head->ptr;
 								delete head;
 								return val;
-							} else {
-								delete new_value;
 							}
 						} else {
+							delete new_val;
 							return nullptr;
 						}
 					}
