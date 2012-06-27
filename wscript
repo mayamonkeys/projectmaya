@@ -15,20 +15,43 @@ def options(opt):
 	group = opt.add_option_group(name + ' specific options')
 	group.add_option('-d', '--debug', dest='debug', default=False, action='store_true', help='enables debug build (used by developers)')
 	group.add_option('-r', '--release', dest='release', default=False, action='store_true', help='enables optimized release build')
+	group.add_option('-s', '--sanitizer', dest='sanitizer', default=False, action='store_true', help='Special (slow) build using clang AdressSanitizer')
 
 def configure(conf):
 	conf.load('compiler_cxx')
 	
 	conf.env.NAME = name
 	
-	# check compiler flags
+	# collect compiler flag sets
+	flags_cpp11 = True
+	flags_debug = False
+	flags_optimize = False
+	flags_sanitizer = False
+	flags_warnings = False
 	if conf.options.debug:
+		flags_debug = True
+		flags_warnings = True
+	if conf.options.release:
+		flags_optimize = True
+	if conf.options.sanitizer:
+		flags_debug = True
+		flags_optimize = True
+		flags_sanitizer = True
+	
+	# check/add compiler flags
+	if flags_cpp11:
+		conf.check_cxx(cxxflags='-std=c++0x', uselib_store='DEFAULT')
+	if flags_debug:
+		conf.check_cxx(cxxflags='-g', uselib_store='DEFAULT')
+		conf.check_cxx(cxxflags='-fno-omit-frame-pointer', uselib_store='DEFAULT')
+		conf.check_cxx(cxxflags='-fno-optimize-sibling-calls', uselib_store='DEFAULT')
+	if flags_optimize:
+		conf.check_cxx(cxxflags='-O2', uselib_store='DEFAULT')
+	if flags_sanitizer:
+		conf.check_cxx(cxxflags='-faddress-sanitizer', uselib_store='DEFAULT')
+	if flags_warnings:
 		conf.check_cxx(cxxflags='-Wall', uselib_store='DEFAULT')
 		conf.check_cxx(cxxflags='-Wextra', uselib_store='DEFAULT')
-		conf.check_cxx(cxxflags='-g', uselib_store='DEFAULT')
-	if conf.options.release:
-		conf.check_cxx(cxxflags='-O2', uselib_store='DEFAULT')
-	conf.check_cxx(cxxflags='-std=c++0x', uselib_store='DEFAULT')
 	conf.env.append_unique('CXXFLAGS', conf.env.CXXFLAGS_DEFAULT)
 	
 	# check stdlib headers
