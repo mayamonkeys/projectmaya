@@ -25,6 +25,7 @@ def configure(conf):
 	# collect compiler flag sets
 	flags_cpp11 = True
 	flags_debug = False
+	flags_nice_output = True
 	flags_optimize = False
 	flags_sanitizer = False
 	flags_warnings = False
@@ -45,6 +46,9 @@ def configure(conf):
 		conf.check_cxx(cxxflags='-g', uselib_store='DEFAULT')
 		conf.check_cxx(cxxflags='-fno-omit-frame-pointer', uselib_store='DEFAULT')
 		conf.check_cxx(cxxflags='-fno-optimize-sibling-calls', uselib_store='DEFAULT')
+	if flags_nice_output:
+		conf.check_cxx(cxxflags='-fcolor-diagnostics', uselib_store='DEFAULT')
+		conf.check_cxx(cxxflags='-fdiagnostics-show-category=name', uselib_store='DEFAULT')
 	if flags_optimize:
 		conf.check_cxx(cxxflags='-O2', uselib_store='DEFAULT')
 	if flags_sanitizer:
