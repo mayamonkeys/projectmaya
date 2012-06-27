@@ -28,6 +28,7 @@ def configure(conf):
 	flags_nice_output = True
 	flags_optimize = False
 	flags_sanitizer = False
+	flags_stablecode = True
 	flags_warnings = False
 	if conf.options.debug:
 		flags_debug = True
@@ -53,6 +54,8 @@ def configure(conf):
 		conf.check_cxx(cxxflags='-O2', uselib_store='DEFAULT')
 	if flags_sanitizer:
 		conf.check_cxx(cxxflags='-faddress-sanitizer', uselib_store='DEFAULT')
+	if flags_stablecode:
+		conf.check_cxx(cxxflags='-fcatch-undefined-behavior', uselib_store='DEFAULT')
 	if flags_warnings:
 		conf.check_cxx(cxxflags='-Wall', uselib_store='DEFAULT')
 		conf.check_cxx(cxxflags='-Wextra', uselib_store='DEFAULT')
